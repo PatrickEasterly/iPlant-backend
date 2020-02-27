@@ -18,10 +18,10 @@ VALUES
 
 insert into water(plantid, watertime)
 VALUES
-(1,'01-27-2020'),
-(1,'01-31-2020'),
-(1,'02-04-2020'),
-(1,'02-08-2020');
+(1,'2020-01-08 14:05:06-05'),
+(1,'2020-01-08 14:05:06-05'),
+(1,'2020-01-08 14:05:06-05'),
+(1,'2020-01-08 14:05:06-05');
 
 insert into follow(userid, follows)
 VALUES
@@ -30,11 +30,11 @@ VALUES
 
 insert into posts (userid, plantid, postdate, photo, caption)
 VALUES
-(1, 1, '01-27-2020', 'photo', 'caption');
+(1, 1, '2020-01-08 14:05:06-05', 'photo', 'caption');
 
 insert into comments(userid, postid, commentdate, comment)
 VALUES
-(1,1, '01-28-2020', 'hey nice plant');
+(1,1, '2020-01-08 14:05:06-05', 'hey nice plant');
 
 insert into likes(postid,userid)
 VALUES

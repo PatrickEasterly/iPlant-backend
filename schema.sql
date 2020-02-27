@@ -30,7 +30,7 @@ create table plants (
 
 create table water(
     plantid INTEGER REFERENCES plants(id),
-    watertime text --saved as text, not date, so that only JS does any timezone conversions (timestamptz is another option (with timezone info, so no conversions happen))
+    watertime timestamptz
 );
 
 -- social tables
@@ -43,7 +43,7 @@ create table posts(
     id serial primary key,
     userid INTEGER REFERENCES users(id),
     plantid INTEGER REFERENCES plants(id),
-    postdate text, --saved as text, not date, so that only JS does any timezone conversions
+    postdate timestamptz,
     photo text, --url of photo on server.
     caption text
 );
@@ -52,7 +52,7 @@ create table comments(
     id serial primary key,
     userid INTEGER REFERENCES users(id),
     postid INTEGER REFERENCES posts(id),
-    commentdate text, --saved as text, not date, so that only JS does any timezone conversions
+    commentdate timestamptz,
     comment text
 );
 
