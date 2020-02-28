@@ -7,10 +7,19 @@ create table users (
     hash text -- one way encryption hash. doesn't need to be recovered if user loses it. 
 );
 
+create table rooms(
+    id serial primary key,
+    userid INTEGER references users(id),
+    name text,
+    hightemp integer,
+    lowtemp integer,
+    lightamount text
+);
+
 --plant info tables
 create table plantinfo(
     id serial primary key,
-    latinname text,
+    latinname text unique not null,
     commonname text,
     waterneeds text, -- one of maybe 5 or so categories.
     sunlight text, -- one of probably 3 categories, shade, partial sun, full sun.
@@ -24,6 +33,7 @@ create table plantinfo(
 create table plants (
     id serial primary key,
     userid INTEGER REFERENCES users(id),
+    roomid INTEGER REFERENCES rooms(id),
     plantinfoid INTEGER REFERENCES plantinfo(id),
     name text
 );

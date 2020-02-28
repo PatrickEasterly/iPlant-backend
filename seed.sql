@@ -4,11 +4,13 @@ VALUES
 ('','','','','',''),
 ('','','','','','');
 
-insert into plantinfo (latinname, commonname, waterneeds, sunlight, lowtemp, soiltype, about, planttype, photo)
+insert into rooms(userid, name, hightemp, lowtemp, lightamount)
 VALUES
-('latinname', 'commonname', 'waterneeds', 'sunlight', 'lowtemp', 'soiltype', 'about', 'planttype', 'photo'),
-('latinname', 'commonname', 'waterneeds', 'sunlight', 'lowtemp', 'soiltype', 'about', 'planttype', 'photo'),
-('latinname', 'commonname', 'waterneeds', 'sunlight', 'lowtemp', 'soiltype', 'about', 'planttype', 'photo');
+(1, "kitchen", 68, 78, "full");
+
+-- insert into plantinfo (latinname, commonname, waterneeds, sunlight, lowtemp, soiltype, about, planttype, photo)
+-- VALUES
+-- ('latinname', 'commonname', 'waterneeds', 'sunlight', 'lowtemp', 'soiltype', 'about', 'planttype', 'photo');
 
 insert into plants (userid, plantinfoid, name)
 VALUES
