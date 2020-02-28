@@ -25,6 +25,7 @@ create table plantinfo(
     sunlight text, -- one of probably 3 categories, shade, partial sun, full sun.
     lowtemp text, -- most plant sites only give a lower range, not a high range, so whatever. High temp can be like low+50 or something.
     soiltype text, -- fine, medium, coarse (can be one or many of these types)
+    soilph text,
     about text, -- a paragraph about how awesome this plant is, probably pulled from wikipedia.
     planttype text, -- theres a better term I can think of, but this would be like, Tree, Shrub, Perennial, Succulent, Vine/climber, bulb, etc.
     photo text -- url location of plant photo?!?
