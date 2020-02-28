@@ -1,8 +1,8 @@
 create table users (
     id serial primary key,
     username text unique not null,
-    firstName text, 
-    lastName text, 
+    firstname text, 
+    lastname text, 
     email text unique not null, -- this needs to be simple encrypted with a 2 way key (one key in the secret .env file SHOULD work for all users, I just don't want to store emails as plaintext)
     hash text -- one way encryption hash. doesn't need to be recovered if user loses it. 
 );
@@ -10,19 +10,27 @@ create table users (
 --plant info tables
 create table plantinfo(
     id serial primary key,
-    info text --this schema will get fleshed out more once we settle on WHAT data to pull from what API.
+    latinname text,
+    commonname text,
+    waterneeds text, -- one of maybe 5 or so categories.
+    sunlight text, -- one of probably 3 categories, shade, partial sun, full sun.
+    lowtemp text, -- most plant sites only give a lower range, not a high range, so whatever. High temp can be like low+50 or something.
+    soiltype text, -- fine, medium, coarse (can be one or many of these types)
+    about text, -- a paragraph about how awesome this plant is, probably pulled from wikipedia.
+    planttype text, -- theres a better term I can think of, but this would be like, Tree, Shrub, Perennial, Succulent, Vine/climber, bulb, etc.
+    photo text -- url location of plant photo?!?
 );
 
 create table plants (
     id serial primary key,
     userid INTEGER REFERENCES users(id),
-    plantid INTEGER REFERENCES plantinfo(id),
+    plantinfoid INTEGER REFERENCES plantinfo(id),
     name text
 );
 
 create table water(
     plantid INTEGER REFERENCES plants(id),
-    watertime text --saved as text, not date, so that only JS does any timezone conversions
+    watertime timestamptz
 );
 
 -- social tables
@@ -35,7 +43,7 @@ create table posts(
     id serial primary key,
     userid INTEGER REFERENCES users(id),
     plantid INTEGER REFERENCES plants(id),
-    postdate text, --saved as text, not date, so that only JS does any timezone conversions
+    postdate timestamptz,
     photo text, --url of photo on server.
     caption text
 );
@@ -44,7 +52,7 @@ create table comments(
     id serial primary key,
     userid INTEGER REFERENCES users(id),
     postid INTEGER REFERENCES posts(id),
-    commentdate text, --saved as text, not date, so that only JS does any timezone conversions
+    commentdate timestamptz,
     comment text
 );
 
