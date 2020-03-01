@@ -3,10 +3,10 @@ const express = require('express');
 const app = express();
 const server = http.createServer(app);
 const PORT = 5000;
-//const require('helmet');
+const helmet = require('helmet');
 const apiRouter = require('./routes/api');
 
-//app.use('./api', apiRouter);
+app.use('/api', apiRouter);
 
 app.get('/*', (req, res) =>{
     res.json([
