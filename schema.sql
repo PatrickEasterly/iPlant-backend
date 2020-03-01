@@ -10,7 +10,7 @@ create table users (
 create table rooms(
     id serial primary key,
     userid INTEGER references users(id),
-    name text,
+    roomname text,
     hightemp integer,
     lowtemp integer,
     lightamount text
@@ -23,7 +23,7 @@ create table plantinfo(
     commonname text,
     waterneeds text, -- one of maybe 5 or so categories.
     sunlight text, -- one of probably 3 categories, shade, partial sun, full sun.
-    lowtemp text, -- most plant sites only give a lower range, not a high range, so whatever. High temp can be like low+50 or something.
+    lowtemp integer, -- most plant sites only give a lower range, not a high range, so whatever. High temp can be like low+50 or something.
     soiltype text, -- fine, medium, coarse (can be one or many of these types)
     soilph text,
     about text, -- a paragraph about how awesome this plant is, probably pulled from wikipedia.
@@ -36,7 +36,7 @@ create table plants (
     userid INTEGER REFERENCES users(id),
     roomid INTEGER REFERENCES rooms(id),
     plantinfoid INTEGER REFERENCES plantinfo(id),
-    name text
+    plantname text
 );
 
 create table water(
