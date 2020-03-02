@@ -1,16 +1,17 @@
 const express = require('express');
 const router = express.Router();
 const db = require('../connection');
+const api = require('../models/apiquery');
 
 router.get('/plantinfo', async (req, res)=>{
-    let allPlants = await db.any(`SELECT id, latinname, commonname FROM plantinfo`);
+    let allPlants = await api.allPlantinfo();
     res.json(allPlants);
 });
 
 router.get('/plantinfo/:id', async (req, res)=>{
     let {id} = req.params;
-    let allPlants = await db.any(`SELECT * FROM plantinfo WHERE id=${id}`);
-    res.json(allPlants);
+    let onePlants = await api.onePlantinfo(id);
+    res.json(onePlants);
 })
 
 
