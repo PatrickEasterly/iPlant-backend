@@ -125,14 +125,12 @@ function entrybuilder(num){
     let recordNum = num.toString();
     let newRecord = {};
 
-    // Wrap all of these in IF statements to check to see if the record exists before assigning it
     if(plants[recordNum]["Scientific_Name"]){
 
         newRecord.latinname = plants[recordNum]["Scientific_Name"];
         newRecord.about = findabout(plants[recordNum]["Scientific_Name"]);
     } else {
         return false;
-
     }
     if(plants[recordNum]["Common_Name"]){
         newRecord.commonname = plants[recordNum]["Common_Name"];
