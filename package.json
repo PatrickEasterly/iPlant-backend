@@ -1,0 +1,35 @@
+{
+  "name": "backend",
+  "version": "1.0.0",
+  "description": "Backend for the best gardening app ever.",
+  "main": "index.js",
+  "dependencies": {
+    "express": "^4.17.1",
+    "helmet": "^3.21.3",
+    "pg-promise": "^10.4.4"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.2"
+  },
+  "scripts": {
+    "dev": "nodemon --ignore './sessions/' index.js",
+    "db:delete": "dropdb plants",
+    "db:create": "createdb plants",
+    "db:schema": "psql -f schema.sql plants",
+    "db:plantseed": "node plantseed.js",
+    "db:seed": "psql -f seed.sql plants",
+    "db:reset": "npm run db:delete && npm run db:create && npm run db:schema && npm run db:plantseed && npm run db:seed",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/PatrickEasterly/iPlant-backend.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/PatrickEasterly/iPlant-backend/issues"
+  },
+  "homepage": "https://github.com/PatrickEasterly/iPlant-backend#readme"
+}

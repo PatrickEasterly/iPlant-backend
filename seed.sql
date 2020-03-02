@@ -1,20 +1,18 @@
-insert into users (username, email, firstname, lastname, email, hash)
+insert into users (username, firstname, lastname, email, hash)
 VALUES
-('','','','','',''),
-('','','','','',''),
-('','','','','','');
+('','','','','');
 
-insert into plantinfo (latinname, commonname, waterneeds, sunlight, lowtemp, soiltype, about, planttype, photo)
+insert into rooms(userid, roomname, hightemp, lowtemp, lightamount)
 VALUES
-('latinname', 'commonname', 'waterneeds', 'sunlight', 'lowtemp', 'soiltype', 'about', 'planttype', 'photo'),
-('latinname', 'commonname', 'waterneeds', 'sunlight', 'lowtemp', 'soiltype', 'about', 'planttype', 'photo'),
-('latinname', 'commonname', 'waterneeds', 'sunlight', 'lowtemp', 'soiltype', 'about', 'planttype', 'photo');
+(1, 'kitchen', 68, 78, 'full');
 
-insert into plants (userid, plantinfoid, name)
+-- insert into plantinfo (latinname, commonname, waterneeds, sunlight, lowtemp, soiltype, about, planttype, photo)
+-- VALUES
+-- ('latinname', 'commonname', 'waterneeds', 'sunlight', 'lowtemp', 'soiltype', 'about', 'planttype', 'photo');
+
+insert into plants (userid, roomid, plantinfoid, plantname)
 VALUES
-(1, 1, 'ficus'),
-(1, 1, 'ficus'),
-(1, 1, 'ficus');
+(1, 1, 1, 'ficus');
 
 insert into water(plantid, watertime)
 VALUES
@@ -25,8 +23,8 @@ VALUES
 
 insert into follow(userid, follows)
 VALUES
-(1,2),
-(1,3);
+(1,1);
+-- (1,3);
 
 insert into posts (userid, plantid, postdate, photo, caption)
 VALUES
@@ -34,7 +32,7 @@ VALUES
 
 insert into comments(userid, postid, commentdate, comment)
 VALUES
-(1,1, '2020-01-08 14:05:06-05', 'hey nice plant');
+(1, 1, '2020-01-08 14:05:06-05', 'hey nice plant');
 
 insert into likes(postid,userid)
 VALUES
