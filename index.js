@@ -8,22 +8,22 @@ const bcrypt = require('bcrypt');
 const saltRounds = 10;
 const jwt = require('jsonwebtoken');
 
-const cors = require('cors');
-
 const app = express();
 const server = http.createServer(app);
 const PORT = 5000;
 const apiRouter = require('./routes/api');
 const userRouter = require('./routes/user');
 
-app.use(cors()); // hotfix for local nonsecure server.
 app.use(helmet());
 app.use(logger('dev'));
+app.use('/api', apiRouter);
+
+
+
 
 app.use(bodyParser.urlencoded({extended:false}));
 app.use(bodyParser.json());
 
-app.use('/api', apiRouter);
 app.use('/user', userRouter);
 
 app.get('/*', (req, res) =>{

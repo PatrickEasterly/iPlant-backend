@@ -2,6 +2,9 @@ const express = require('express');
 const router = express.Router();
 const db = require('../connection');
 const api = require('../models/apiquery');
+const cors = require('cors');
+
+app.use(cors());
 
 router.get('/users', async (req, res)=>{
     let allUsers = await api.allUsers();
