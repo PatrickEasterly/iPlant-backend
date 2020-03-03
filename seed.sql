@@ -24,7 +24,6 @@ VALUES
 insert into follow(userid, follows)
 VALUES
 (1,1);
--- (1,3);
 
 insert into posts (userid, plantid, postdate, photo, caption)
 VALUES
