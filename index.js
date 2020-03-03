@@ -16,7 +16,7 @@ const PORT = 5000;
 const apiRouter = require('./routes/api');
 const userRouter = require('./routes/user');
 
-app.use(cors({origin:['*'], methods:['*'],credentials:true})); // hotfix for local nonsecure server.
+app.use(cors()); // hotfix for local nonsecure server.
 app.use(helmet());
 app.use(logger('dev'));
 
