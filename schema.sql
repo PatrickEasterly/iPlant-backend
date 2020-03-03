@@ -36,6 +36,8 @@ create table plants (
     userid INTEGER REFERENCES users(id),
     roomid INTEGER REFERENCES rooms(id),
     plantinfoid INTEGER REFERENCES plantinfo(id),
+    --humidsensor integer,
+    --
     plantname text
 );
 
