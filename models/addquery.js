@@ -23,7 +23,7 @@ async function addPlantinfo(latinname, commonname, waterneeds, sunlight, lowtemp
     return newRec;
 }
 
-async function addPlants(userid, roomid, plantinfoid, plantname){
+async function addPlant(userid, roomid, plantinfoid, plantname){
     let newRec = await db.one(`insert into plants (userid, roomid, plantinfoid, plantname)
     VALUES
     ('${userid}','${roomid}','${plantinfoid}','${plantname}') RETURNING *;`);
@@ -43,21 +43,21 @@ async function addFollow(userid, follows){
     ('${userid}','${follows}');`);
 }
 
-async function addPosts(userid, plantid, postdate, photo, caption){
+async function addPost(userid, plantid, postdate, photo, caption){
     let newRec = await db.one(`insert into posts (userid, plantid, postdate, photo, caption)
     VALUES
     ('${userid}','${plantid}','${postdate}','${photo}', '${caption}) RETURNING *;`);
     return newRec;
 }
 
-async function addComments(userid, postid, commentdate, comment){
+async function addComment(userid, postid, commentdate, comment){
     let newRec = await db.one(`insert into comments (userid, postid, commentdate, comment)
     VALUES
     ('${userid}','${postid}','${commentdate}','${comment}') RETURNING *;`);
     return newRec;
 }
 
-async function addLikes(postid, userid){
+async function addLike(postid, userid){
     let newRec = await db.one(`insert into likes (postid, userid)
     VALUES
     ('${postid}','${userid}') RETURNING *;`);
@@ -68,10 +68,10 @@ module.exports = {
     addUser,
     addRoom,
     addPlantinfo,
-    addPlants,
+    addPlant,
     addWater,
     addFollow,
-    addPosts,
-    addComments,
-    addLikes
+    addPost,
+    addComment,
+    addLike
 }

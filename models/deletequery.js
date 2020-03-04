@@ -20,13 +20,13 @@ async function deletePlant(id){
     return delRec;
 }
 
-async function deleteWater(plantid, watertime){
-let delRec = db.one(`DELETE FROM water WHERE userid=${plantid} AND watertime='${watertime}' RETURNING *;`);
+async function deleteWater(waterObj){
+let delRec = db.one(`DELETE FROM water WHERE userid=${waterObj.plantid} AND watertime='${waterObj.watertime}' RETURNING *;`);
     return delRec;
 }
 
-async function deleteFollow(userid, follows){
-    let delRec = db.one(`DELETE FROM follow WHERE userid=${userid} AND follows='${follows}' RETURNING *;`);
+async function deleteFollow(followObj){
+    let delRec = db.one(`DELETE FROM follow WHERE userid=${followObj.userid} AND follows='${followObj.follows}' RETURNING *;`);
     return delRec;
 }
 
@@ -40,8 +40,9 @@ async function deleteComment(id){
     return delRec;
 }
 
-async function deleteLike(postid, userid){
-    let delRec = db.one(`DELETE FROM likes WHERE postid=${postid} AND userid='${userid}'`);
+async function deleteLike(likeObj){
+    let delRec = db.one(`DELETE FROM likes WHERE postid=${likeObj.postid} AND userid='${likeObj.userid} RETURNING *;`);
+    return delRec;
 }
 
 module.exports = {

@@ -172,6 +172,7 @@ module.exports = {
     updateUser,
     updateRoom,
     updatePlantinfo,
+    updatePlant,
     updatePost,
     updateComment
 }

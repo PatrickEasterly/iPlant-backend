@@ -19,7 +19,7 @@ const appRouter = require('./routes/app');
 
 
 
-router.use(cors());
+app.use(cors());
 app.use(helmet());
 app.use(logger('dev'));
 app.use('/api', apiRouter);
@@ -28,7 +28,7 @@ app.use('/api', apiRouter);
 app.use(bodyParser.urlencoded({extended:false}));
 app.use(bodyParser.json());
 app.use('/app', appRouter);
-app.use('/user', userRouter);
+//app.use('/user', userRouter);
 
 app.get('/*', (req, res) =>{
     res.json({whatisthis:"its a server for an unfinished webapp obviously"})
