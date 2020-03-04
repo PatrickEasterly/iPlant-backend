@@ -1,39 +1,47 @@
 const db = require('../connection');
 
 async function deleteUser(id){
-    db.none(`DELETE FROM users WHERE id=${id}`);
+    let delRec = db.one(`DELETE FROM users WHERE id=${id} RETURNING *;`);
+    return delRec;
 }
 
 async function deleteRoom(id){
-    db.none(`DELETE FROM Rooms WHERE id=${id}`);
+    let delRec = db.one(`DELETE FROM Rooms WHERE id=${id} RETURNING *;`);
+    return delRec;
 }
 
 async function deletePlantinfo(id){
-    db.none(`DELETE FROM Plantinfo WHERE id=${id}`);
+    let delRec = db.one(`DELETE FROM Plantinfo WHERE id=${id} RETURNING *;`);
+    return delRec;
 }
 
 async function deletePlant(id){
-    db.none(`DELETE FROM plants WHERE id=${id}`);
+    let delRec = db.one(`DELETE FROM plants WHERE id=${id} RETURNING *;`);
+    return delRec;
 }
 
 async function deleteWater(plantid, watertime){
-db.none(`DELETE FROM water WHERE userid=${plantid} AND watertime='${watertime}'`);
+let delRec = db.one(`DELETE FROM water WHERE userid=${plantid} AND watertime='${watertime}' RETURNING *;`);
+    return delRec;
 }
 
 async function deleteFollow(userid, follows){
-    db.none(`DELETE FROM follow WHERE userid=${userid} AND follows='${follows}'`);
+    let delRec = db.one(`DELETE FROM follow WHERE userid=${userid} AND follows='${follows}' RETURNING *;`);
+    return delRec;
 }
 
 async function deletePost(id){
-    db.none(`DELETE FROM posts WHERE id=${id}`);
+    let delRec = db.one(`DELETE FROM posts WHERE id=${id} RETURNING *;`);
+    return delRec;
 }
 
 async function deleteComment(id){
-    db.none(`DELETE FROM comments WHERE id=${id}`);
+    let delRec = db.one(`DELETE FROM comments WHERE id=${id} RETURNING *;`);
+    return delRec;
 }
 
 async function deleteLike(postid, userid){
-    db.none(`DELETE FROM likes WHERE postid=${postid} AND userid='${userid}'`);
+    let delRec = db.one(`DELETE FROM likes WHERE postid=${postid} AND userid='${userid}'`);
 }
 
 module.exports = {

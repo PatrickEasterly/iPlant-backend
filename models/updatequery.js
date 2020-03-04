@@ -22,9 +22,11 @@ async function updateUser(userObj){
             updateString += ` hash='${userObj.hash}',`;
         }
         updateString = updateString.slice(0, -1);
-        updateString += ` where id = ${userObj.id}`;
-        await db.none(updateString);
+        updateString += ` where id = ${userObj.id} RETURNING *`;
+        let updated = await db.one(updateString);
+        return updated;
     }
+    return {error : "invalid id"};
 }
 
 async function updateRoom(roomObj){
@@ -46,9 +48,11 @@ async function updateRoom(roomObj){
             updateString += ` lightamount='${roomObj.lightamount}',`;
         }
         updateString = updateString.slice(0, -1);
-        updateString += ` where id = ${roomObj.id}`;
-        await db.none(updateString);
+        updateString += ` where id = ${roomObj.id} RETURNING *`;
+        let updated = await db.one(updateString);
+        return updated;
     }
+    return {error : "invalid id"};
 }
 
 async function updatePlantinfo(plantinfoObj){
@@ -85,9 +89,11 @@ async function updatePlantinfo(plantinfoObj){
             updateString += ` photo='${plantinfoObj.photo}',`;
         }
         updateString = updateString.slice(0, -1);
-        updateString += ` where id = ${plantinfoObj.id}`;
-        await db.none(updateString);
+        updateString += ` where id = ${plantinfoObj.id} RETURNING *`;
+        let updated = await db.one(updateString);
+        return updated;
     }
+    return {error : "invalid id"};
 }
 
 async function updatePlant(plantObj){
@@ -106,9 +112,11 @@ async function updatePlant(plantObj){
             updateString += ` plantname='${plantObj.plantname}',`;
         }
         updateString = updateString.slice(0, -1);
-        updateString += ` where id = ${plantObj.id}`;
-        await db.none(updateString);
+        updateString += ` where id = ${plantObj.id} RETURNING *`;
+        let updated = await db.one(updateString);
+        return updated;
     }
+    return {error : "invalid id"};
 }
 
 async function updatePost(postObj){
@@ -130,9 +138,11 @@ async function updatePost(postObj){
             updateString += ` caption='${postObj.caption}',`;
         }
         updateString = updateString.slice(0, -1);
-        updateString += ` where id = ${postObj.id}`;
-        await db.none(updateString);
+        updateString += ` where id = ${postObj.id} RETURNING *`;
+        let updated = await db.one(updateString);
+        return updated;
     }
+    return {error : "invalid id"};
 }
 
 async function updateComment(commentObj){
@@ -151,9 +161,11 @@ async function updateComment(commentObj){
             updateString += ` comment='${commentObj.comment}',`;
         }
         updateString = updateString.slice(0, -1);
-        updateString += ` where id = ${commentObj.id}`;
-        await db.none(updateString);
+        updateString += ` where id = ${commentObj.id} RETURNING *`;
+        let updated = await db.one(updateString);
+        return updated;
     }
+    return {error : "invalid id"};
 }
 
 module.exports = {
