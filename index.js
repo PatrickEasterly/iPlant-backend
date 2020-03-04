@@ -13,6 +13,7 @@ const server = http.createServer(app);
 const PORT = 5000;
 const apiRouter = require('./routes/api');
 const userRouter = require('./routes/user');
+const appRouter = require('./routes/app');
 
 app.use(helmet());
 app.use(logger('dev'));
@@ -21,7 +22,7 @@ app.use('/api', apiRouter);
 
 app.use(bodyParser.urlencoded({extended:false}));
 app.use(bodyParser.json());
-
+app.use('/app', appRouter);
 app.use('/user', userRouter);
 
 app.get('/*', (req, res) =>{
