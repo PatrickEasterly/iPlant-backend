@@ -6,6 +6,13 @@ async function addUser({username, firstname, lastname, email, hash}){
     let newRec = await db.one(`insert into users (username, firstname, lastname, email, hash)
     VALUES
     ('${username}','${firstname}','${lastname}','${email}','${hash}') RETURNING *;`);
+    console.log(newRec);
+    // let defaultRoom = await db.any(`insert into rooms (userid, roomname, defaultroom) 
+    // VALUES 
+    // ('${newRec.id}','Living Room', true),
+    // ('${newRec.id}','Kitchen', false),
+    // ('${newRec.id}','Bedroom', false);`);
+    // console.log(defaultRoom);
     return newRec;
 }
 
