@@ -1,4 +1,4 @@
-const db = "../connection";
+const db = require("../connection");
 
 
 //updateUser takes in an object with a ID and all fields needing updating.
@@ -23,7 +23,8 @@ async function updateUser(userObj){
         }
         updateString = updateString.slice(0, -1);
         updateString += ` where id = ${userObj.id} RETURNING *`;
-        let updated = await db.one(updateString);
+        console.log(updateString);
+        let updated = await db.oneOrNone(updateString);
         return updated;
     }
     return {error : "invalid id"};
@@ -49,7 +50,8 @@ async function updateRoom(roomObj){
         }
         updateString = updateString.slice(0, -1);
         updateString += ` where id = ${roomObj.id} RETURNING *`;
-        let updated = await db.one(updateString);
+        console.log(updateString);
+        let updated = await db.oneOrNone(updateString);
         return updated;
     }
     return {error : "invalid id"};
@@ -90,7 +92,7 @@ async function updatePlantinfo(plantinfoObj){
         }
         updateString = updateString.slice(0, -1);
         updateString += ` where id = ${plantinfoObj.id} RETURNING *`;
-        let updated = await db.one(updateString);
+        let updated = await db.oneOrNone(updateString);
         return updated;
     }
     return {error : "invalid id"};
@@ -113,7 +115,7 @@ async function updatePlant(plantObj){
         }
         updateString = updateString.slice(0, -1);
         updateString += ` where id = ${plantObj.id} RETURNING *`;
-        let updated = await db.one(updateString);
+        let updated = await db.oneOrNone(updateString);
         return updated;
     }
     return {error : "invalid id"};
@@ -139,7 +141,7 @@ async function updatePost(postObj){
         }
         updateString = updateString.slice(0, -1);
         updateString += ` where id = ${postObj.id} RETURNING *`;
-        let updated = await db.one(updateString);
+        let updated = await db.oneOrNone(updateString);
         return updated;
     }
     return {error : "invalid id"};
@@ -162,7 +164,7 @@ async function updateComment(commentObj){
         }
         updateString = updateString.slice(0, -1);
         updateString += ` where id = ${commentObj.id} RETURNING *`;
-        let updated = await db.one(updateString);
+        let updated = await db.oneOrNone(updateString);
         return updated;
     }
     return {error : "invalid id"};

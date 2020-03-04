@@ -32,24 +32,28 @@ router.delete('/user', async (req, res)=>{
 
 router.post('/room', async (req, res)=>{
     let newRoom = req.headers;
+    //function call to decode JWT into payload object goes here
     let newRec = await post.addRoom(newRoom);
     res.json(newRec);
 });
 
 router.get('/room', async (req, res)=>{
     let room = req.headers;
+    //function call to decode JWT into payload object goes here
     let newRec = await get.oneRoom(room.id);
     res.json(newRec);
 });
 
 router.put('/room', async (req, res)=>{
     let updateRoom = req.headers;
+    //function call to decode JWT into payload object goes here
     let updateRec = await put.updateRoom(updateRoom);
     res.json(updateRec);
 });
 
 router.delete('/room', async (req, res)=>{
     let delRoom = req.headers;
+    //function call to decode JWT into payload object goes here
     let delRec = await del.deleteRoom(delRoom.id);
     res.json(delRec);
 });
