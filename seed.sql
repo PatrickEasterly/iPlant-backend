@@ -1,8 +1,3 @@
-insert into asdf(id, works)
-VALUES
-('1', 'yes'),
-('2', 'yes');
-
 insert into users (username, firstname, lastname, email, hash)
 VALUES
 ('patrick','patrick','easterly','pat@pat.com','hash'),
