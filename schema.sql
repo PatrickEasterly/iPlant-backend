@@ -13,7 +13,8 @@ create table rooms(
     roomname text,
     hightemp integer,
     lowtemp integer,
-    lightamount text
+    lightamount text,
+    defaultroom boolean
 );
 
 --plant info tables
@@ -36,13 +37,13 @@ create table plants (
     userid INTEGER REFERENCES users(id),
     roomid INTEGER REFERENCES rooms(id),
     plantinfoid INTEGER REFERENCES plantinfo(id),
-    --humidsensor integer,
-    --
     plantname text
 );
 
 create table water(
+    id serial primary key,
     plantid INTEGER REFERENCES plants(id),
+    userid INTEGER REFERENCES users(id),
     watertime timestamptz
 );
 
