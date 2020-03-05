@@ -41,6 +41,13 @@ router.get('/plants', async (req, res)=>{
     res.json(allPlants);
 });
 
+// get all plants from one user
+router.get('/plants/user/:id', async (req, res)=>{
+    let {id} = req.params;
+    let allUserPlants = await api.allPlantsUser(id);
+    res.json(allUserPlants);
+})
+
 router.get('/plants/:id', async (req, res)=>{
     let {id} = req.params;
     let onePlant = await api.onePlant(id);
