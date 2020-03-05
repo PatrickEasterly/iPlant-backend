@@ -41,7 +41,9 @@ create table plants (
 );
 
 create table water(
+    id serial primary key,
     plantid INTEGER REFERENCES plants(id),
+    userid INTEGER REFERENCES users(id),
     watertime timestamptz
 );
 

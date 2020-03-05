@@ -3,17 +3,29 @@ const db = require('../connection');
 // query functions to create records in postgres.
 
 async function addUser({username, firstname, lastname, email, hash}){
-    let newRec = await db.one(`insert into users (username, firstname, lastname, email, hash)
-    VALUES
-    ('${username}','${firstname}','${lastname}','${email}','${hash}') RETURNING *;`);
-    console.log(newRec);
-    // let defaultRoom = await db.any(`insert into rooms (userid, roomname, defaultroom) 
-    // VALUES 
-    // ('${newRec.id}','Living Room', true),
-    // ('${newRec.id}','Kitchen', false),
-    // ('${newRec.id}','Bedroom', false);`);
-    // console.log(defaultRoom);
-    return newRec;
+    try{
+        let newRec = await db.one(`insert into users (username, firstname, lastname, email, hash)
+        VALUES
+        ('${username}','${firstname}','${lastname}','${email}','${hash}') RETURNING *;`);
+        console.log(newRec);
+        // let defaultRoom = await db.any(`insert into rooms (userid, roomname, defaultroom) 
+        // VALUES 
+        // ('${newRec.id}','Living Room', true),
+        // ('${newRec.id}','Kitchen', false),
+        // ('${newRec.id}','Bedroom', false);`);
+        // console.log(defaultRoom);
+        return newRec;
+    } catch(e){
+        console.log(e);
+        if (e.detail.includes("exists")){
+            if (e.detail.includes("username")){
+                return ({error:"Username already exists."});
+            }
+            if (e.detail.includes("email")){
+                return ({error:"email address already exists."});
+            }
+        }
+    }
 }
 
 async function addRoom({userid, roomname, hightemp, lowtemp, lightamount}){

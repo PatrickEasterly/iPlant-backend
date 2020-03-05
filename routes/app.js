@@ -10,18 +10,13 @@ router.post('/user', async (req, res)=>{
     try{
         let newUser = req.headers;
         let newRec = await post.addUser(newUser);
-        res.json(newRec);
-    }catch(e){
-        console.log(e);
-        if (e.detail.includes("exists")){
-            if (e.detail.includes("username")){
-                res.json({error:"Username already exists."});
-            }
-            if (e.detail.includes("email")){
-                res.json({error:"email address already exists."});
-            }
+        if (!newRec.error){
+            res.json(newRec);
+        } else {
+            res.status(404).json(newRec);
         }
-        res.json({horse:"shit"})
+    }catch(e){
+        res.status(404).json({horse:"shit"})
     }
 });
 
@@ -38,14 +33,15 @@ router.get('/user', async (req, res)=>{
 
 router.put('/user', async (req, res)=>{
     try{
-    let updateUser = req.headers;
-    let updateRec = await put.updateUser(updateUser);
-    res.json(updateRec);
+        let updateUser = req.headers;
+        let updateRec = await put.updateUser(updateUser);
+        if (!updateRec.error){
+            res.json(updateRec);
+        } else {
+            res.status(404).json(updateRec);
+        }
     }catch(e){
         console.log(e);
-        if (e.detail.includes("exists")){
-            res.json({error:"Username already exists."});
-        }
         res.json({horse:"shit"})
     }
 });
@@ -54,7 +50,7 @@ router.delete('/user', async (req, res)=>{
     try{
     let delUser = req.headers;
     let delRec = await del.deleteUser(delUser.id);
-    res.json(updateRec);
+    res.json(delRec);
     }catch(e){
         console.log(e);
         res.json({horse:"shit"})
@@ -144,14 +140,15 @@ router.put('/plantinfo', async (req, res)=>{
 });
 
 router.delete('/plantinfo', async (req, res)=>{
-    try{
-    let delPlantinfo = req.headers;
-    let delRec = await del.deletePlantinfo(delPlantinfo.id);
-    res.json(delRec);
-    }catch(e){
-        console.log(e);
-        res.json({horse:"shit"})
-    }
+    res.status(404).json({error:"JK you can't delete plant info records. thats just not OK"});
+    // try{
+    //     let delPlantinfo = req.headers;
+    //     let delRec = await del.deletePlantinfo(delPlantinfo.id);
+    //     res.json(delRec);
+    // }catch(e){
+    //     console.log(e);
+    //     res.json({horse:"shit"})
+    // }
 });
 
 router.post('/plant', async (req, res)=>{
@@ -299,9 +296,9 @@ router.post('/water', async (req, res)=>{
 
 router.get('/water', async (req, res)=>{
     try{
-    let Water = req.headers;
-    let newRec = await get.oneWater(Water.plantid);
-    res.json(newRec);
+        let Water = req.headers;
+        let newRec = await get.oneWater(Water.plantid);
+        res.json(newRec);
     }catch(e){
         console.log(e);
         res.json({horse:"shit"})
@@ -310,9 +307,9 @@ router.get('/water', async (req, res)=>{
 
 router.delete('/water', async (req, res)=>{
     try{
-    let delWater = req.headers;
-    let delRec = await del.deleteWater(delWater);
-    res.json(delRec);
+        let delWater = req.headers;
+        let delRec = await del.deleteWater(delWater.id);
+        res.json(delRec);
     }catch(e){
         console.log(e);
         res.json({horse:"shit"})

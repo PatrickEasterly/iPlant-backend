@@ -4,30 +4,42 @@ const db = require("../connection");
 //updateUser takes in an object with a ID and all fields needing updating.
 // builds a postgres call as a string, only including the fields passed in the object.
 async function updateUser(userObj){
-    if(userObj.id){
-        let updateString = 'update users set';
-        if (userObj.username){
-            updateString += ` username='${userObj.username}',`;
+    try{
+        if(userObj.id){
+            let updateString = 'update users set';
+            if (userObj.username){
+                updateString += ` username='${userObj.username}',`;
+            }
+            if (userObj.firstname){
+                updateString += ` firstname='${userObj.firstname}',`;
+            }
+            if (userObj.lastname){
+                updateString += ` lastname='${userObj.lastname}',`;
+            }
+            if (userObj.email){
+                updateString += ` email='${userObj.email}',`;
+            }
+            if (userObj.hash){
+                updateString += ` hash='${userObj.hash}',`;
+            }
+            updateString = updateString.slice(0, -1);
+            updateString += ` where id = ${userObj.id} RETURNING *`;
+            console.log(updateString);
+            let updated = await db.oneOrNone(updateString);
+            return updated;
         }
-        if (userObj.firstname){
-            updateString += ` firstname='${userObj.firstname}',`;
+        return {error : "invalid id"};
+    } catch(e){
+        console.log(e);
+        if (e.detail.includes("exists")){
+            if (e.detail.includes("username")){
+                return ({error:"Username already exists."});
+            }
+            if (e.detail.includes("email")){
+                return ({error:"email address already exists."});
+            }
         }
-        if (userObj.lastname){
-            updateString += ` lastname='${userObj.lastname}',`;
-        }
-        if (userObj.email){
-            updateString += ` email='${userObj.email}',`;
-        }
-        if (userObj.hash){
-            updateString += ` hash='${userObj.hash}',`;
-        }
-        updateString = updateString.slice(0, -1);
-        updateString += ` where id = ${userObj.id} RETURNING *`;
-        console.log(updateString);
-        let updated = await db.oneOrNone(updateString);
-        return updated;
     }
-    return {error : "invalid id"};
 }
 
 async function updateRoom(roomObj){
