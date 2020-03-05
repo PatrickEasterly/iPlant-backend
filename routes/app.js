@@ -92,11 +92,14 @@ router.get('/room', async (req, res)=>{
 
 router.put('/room', async (req, res)=>{
     try{
-    let updateRoom = req.headers;
-    //function call to decode JWT into payload object goes here
-    l 
-    if !updateRec.error){
+        let updateRoom = req.headers;
+        //function call to decode JWT into payload object goes here
+        let updateRec = await put.updateRoom(updateRoom);    
+        if (!updateRec.error){
             res.json(updateRec);
+        } else {
+            res.status(404).json(updateRec);
+        }
     }catch(e){
         console.log(e);
         res.json({horse:"shit"})
@@ -148,9 +151,12 @@ router.get('/plantinfo', async (req, res)=>{
 router.put('/plantinfo', async (req, res)=>{
     try{
     let updatePlantinfo = req.headers;
-    l 
-    if !updateRec.error){
+    let updateRec = await put.updatePlantinfo(updatePlantinfo);    
+        if (!updateRec.error){
             res.json(updateRec);
+        } else {
+            res.status(404).json(updateRec);
+        }
     }catch(e){
         console.log(e);
         res.json({horse:"shit"})
@@ -163,10 +169,10 @@ router.delete('/plantinfo', async (req, res)=>{
     //     let delPlantinfo = req.headers;
     //     let delRec = await del.deletePlantinfo(delPlantinfo.id);
     //     if (!delRec.error){
-            res.json(delRec);
-        } else {
-            res.status(404).json(updateRec);
-        }
+        //     res.json(delRec);
+        // } else {
+        //     res.status(404).json(updateRec);
+        // }
     // }catch(e){
     //     console.log(e);
     //     res.json({horse:"shit"})
@@ -201,10 +207,12 @@ router.get('/plant', async (req, res)=>{
 
 router.put('/plant', async (req, res)=>{
     try{
-    let updatePlant = req.headers;
-    l 
-    if !updateRec.error){
+        let updateRec = await put.updatePlant(updatePlant);    
+        if (!updateRec.error){
             res.json(updateRec);
+        } else {
+            res.status(404).json(updateRec);
+        }
     }catch(e){
         console.log(e);
         res.json({horse:"shit"})
@@ -255,9 +263,12 @@ router.get('/post', async (req, res)=>{
 router.put('/post', async (req, res)=>{
     try{
     let updatePost = req.headers;
-    l 
-    if !updateRec.error){
+    let updateRec = await put.updatePost(updatePost);    
+        if (!updateRec.error){
             res.json(updateRec);
+        } else {
+            res.status(404).json(updateRec);
+        }
     }catch(e){
         console.log(e);
         res.json({horse:"shit"})
@@ -308,9 +319,12 @@ router.get('/comment', async (req, res)=>{
 router.put('/comment', async (req, res)=>{
     try{
     let updateComment = req.headers;
-    l 
-    if !updateRec.error){
+    let updateRec = await put.updateComment(updateComment);    
+        if (!updateRec.error){
             res.json(updateRec);
+        } else {
+            res.status(404).json(updateRec);
+        }
     }catch(e){
         console.log(e);
         res.json({horse:"shit"})
