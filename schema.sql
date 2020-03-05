@@ -1,3 +1,8 @@
+create table asdf (
+    id text,
+    works text
+);
+
 create table users (
     id serial primary key,
     username text unique not null,
@@ -14,7 +19,7 @@ create table rooms(
     hightemp integer,
     lowtemp integer,
     lightamount text,
-    defaultroom boolean
+    defaultroom text
 );
 
 --plant info tables
