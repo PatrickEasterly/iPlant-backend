@@ -34,7 +34,8 @@ router.get('/user', async (req, res)=>{
 router.put('/user', async (req, res)=>{
     try{
         let updateUser = req.headers;
-        let updateRec = await put.updateUser(updateUser);    
+        let updateRec = await put.updateUser(updateUser);
+        console.log(updateRec);    
         if (!updateRec.error){
             res.json(updateRec);
         } else {
@@ -94,7 +95,8 @@ router.put('/room', async (req, res)=>{
     try{
         let updateRoom = req.headers;
         //function call to decode JWT into payload object goes here
-        let updateRec = await put.updateRoom(updateRoom);    
+        let updateRec = await put.updateRoom(updateRoom);
+        console.log(updateRec);    
         if (!updateRec.error){
             res.json(updateRec);
         } else {
