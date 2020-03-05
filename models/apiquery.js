@@ -110,7 +110,14 @@ async function oneLike(postid){
     return oneLike;
 }
 
+// get all plants from one user 
+async function allPlantsUser(userid) {
+    let allPlants = await db.any(`SELECT * from plants WHERE userid=${userid}`);
+    return allPlants;
+}
+
 module.exports = {
+    allPlantsUser,
     allUsers,
     oneUser,
     allRooms,
