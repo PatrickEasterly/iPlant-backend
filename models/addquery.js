@@ -8,12 +8,6 @@ async function addUser({username, firstname, lastname, email, hash}){
         VALUES
         ('${username}','${firstname}','${lastname}','${email}','${hash}') RETURNING *;`);
         console.log(newRec);
-        // let defaultRoom = await db.any(`insert into rooms (userid, roomname, defaultroom) 
-        // VALUES 
-        // ('${newRec.id}','Living Room', true),
-        // ('${newRec.id}','Kitchen', false),
-        // ('${newRec.id}','Bedroom', false);`);
-        // console.log(defaultRoom);
         return newRec;
     } catch(e){
         console.log(e);
@@ -29,58 +23,149 @@ async function addUser({username, firstname, lastname, email, hash}){
 }
 
 async function addRoom({userid, roomname, hightemp, lowtemp, lightamount}){
-    let newRec = await db.one(`insert into rooms (userid, roomname, hightemp, lowtemp, lightamount)
-    VALUES
-    ('${userid}','${roomname}','${hightemp}','${lowtemp}','${lightamount}') RETURNING *;`);
-    return newRec;
+    try{
+        let newRec = await db.one(`insert into rooms (userid, roomname, hightemp, lowtemp, lightamount)
+        VALUES
+        ('${userid}','${roomname}','${hightemp}','${lowtemp}','${lightamount}') RETURNING *;`);
+        return newRec;
+    } catch(e){
+        console.log(e);
+        if (e.detail.includes("present")){
+            if (e.detail.includes("users")){
+                return ({error:"assigned user doesn't exist."});
+            }
+        }
+        return ({error:"something went wrong"});
+    }
 }
 
 async function addPlantinfo({latinname, commonname, waterneeds, sunlight, lowtemp, soiltype, soilph, about, planttype, photo}){
-    let newRec = await db.one(`INSERT INTO plantinfo (latinname, commonname, waterneeds, sunlight, lowtemp, soiltype, soilph, about, planttype, photo) 
-    VALUES 
-    ('${latinname}', '${commonname}', '${waterneeds}', '${sunlight}', ${lowtemp}, '${soiltype}', '${soilph}', '${about}', '${planttype}', '${photo}') RETURNING *;`);
-    return newRec;
+    try{
+        let newRec = await db.one(`INSERT INTO plantinfo (latinname, commonname, waterneeds, sunlight, lowtemp, soiltype, soilph, about, planttype, photo) 
+        VALUES 
+        ('${latinname}', '${commonname}', '${waterneeds}', '${sunlight}', ${lowtemp}, '${soiltype}', '${soilph}', '${about}', '${planttype}', '${photo}') RETURNING *;`);
+        return newRec;
+    } catch(e){
+        console.log(e);
+        return ({error:"something went wrong"});
+    }        
 }
 
 async function addPlant({userid, roomid, plantinfoid, plantname}){
+    try{
     let newRec = await db.one(`insert into plants (userid, roomid, plantinfoid, plantname)
     VALUES
     ('${userid}','${roomid}','${plantinfoid}','${plantname}') RETURNING *;`);
     return newRec;
+    } catch(e){
+        console.log(e);
+        if (e.detail.includes("present")){
+            if (e.detail.includes("users")){
+                return ({error:"assigned user doesn't exist."});
+            }
+            if (e.detail.includes("room")){
+                return ({error:"assigned room doesn't exist."});
+            }
+            if (e.detail.includes("plantinfo")){
+                return ({error:"assigned plantinfo doesn't exist."});
+            }
+        }
+        return ({error:"something went wrong"});
+    }
 }
 
-async function addWater({plantid, watertime}){
-    let newRec = await db.one(`insert into water (plantid, watertime)
-    VALUES
-    ('${plantid}','${watertime}') RETURNING *;`);
-    return newRec;
+async function addWater({plantid, userid, watertime}){
+    try{
+        let newRec = await db.one(`insert into water (plantid, userid, watertime)
+        VALUES
+        ('${plantid}', ${userid} ,'${watertime}') RETURNING *;`);
+        return newRec;
+    } catch(e){
+        console.log(e);
+        if (e.detail.includes("present")){
+            if (e.detail.includes("plant")){
+                return ({error:"assigned plant doesn't exist."});
+            }
+        }
+        return ({error:"something went wrong"});
+    }
 }
 
 async function addFollow({userid, follows}){
-    let newRec = await db.one(`insert into follow (userid, follows)
-    VALUES
-    ('${userid}','${follows}');`);
+    try{
+        let newRec = await db.one(`insert into follow (userid, follows)
+        VALUES
+        ('${userid}','${follows}');`);
+        return newRec;
+    } catch(e){
+        console.log(e);
+        if (e.detail.includes("present")){
+            if (e.detail.includes("users")){
+                return ({error:"assigned user doesn't exist."});
+            }
+        }
+        return ({error:"something went wrong"});
+    }
 }
 
 async function addPost({userid, plantid, postdate, photo, caption}){
-    let newRec = await db.one(`insert into posts (userid, plantid, postdate, photo, caption)
-    VALUES
-    ('${userid}','${plantid}','${postdate}','${photo}', '${caption}) RETURNING *;`);
-    return newRec;
+    try{
+        let newRec = await db.one(`insert into posts (userid, plantid, postdate, photo, caption)
+        VALUES
+        ('${userid}','${plantid}','${postdate}','${photo}', '${caption}) RETURNING *;`);
+        return newRec;
+    } catch(e){
+        console.log(e);
+        if (e.detail.includes("present")){
+            if (e.detail.includes("users")){
+                return ({error:"assigned user doesn't exist."});
+            }
+            if (e.detail.includes("plant")){
+                return ({error:"assigned plant doesn't exist."});
+            }
+        }
+        return ({error:"something went wrong"});
+    }
 }
 
 async function addComment({userid, postid, commentdate, comment}){
-    let newRec = await db.one(`insert into comments (userid, postid, commentdate, comment)
-    VALUES
-    ('${userid}','${postid}','${commentdate}','${comment}') RETURNING *;`);
-    return newRec;
+    try{
+        let newRec = await db.one(`insert into comments (userid, postid, commentdate, comment)
+        VALUES
+        ('${userid}','${postid}','${commentdate}','${comment}') RETURNING *;`);
+        return newRec;
+    } catch(e){
+        console.log(e);
+        if (e.detail.includes("present")){
+            if (e.detail.includes("users")){
+                return ({error:"assigned user doesn't exist."});
+            }
+            if (e.detail.includes("post")){
+                return ({error:"assigned post doesn't exist."});
+            }
+        }
+        return ({error:"something went wrong"});
+    }
 }
 
 async function addLike({postid, userid}){
-    let newRec = await db.one(`insert into likes (postid, userid)
-    VALUES
-    ('${postid}','${userid}') RETURNING *;`);
-    return newRec;
+    try{
+        let newRec = await db.one(`insert into likes (postid, userid)
+        VALUES
+        ('${postid}','${userid}') RETURNING *;`);
+        return newRec;
+    } catch(e){
+        console.log(e);
+        if (e.detail.includes("present")){
+            if (e.detail.includes("post")){
+                return ({error:"assigned post doesn't exist."});
+            }
+            if (e.detail.includes("users")){
+                return ({error:"assigned user doesn't exist."});
+            }
+        }
+        return ({error:"something went wrong"});
+    }
 }
 
 module.exports = {

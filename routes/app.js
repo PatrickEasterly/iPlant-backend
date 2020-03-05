@@ -64,15 +64,15 @@ router.delete('/user', async (req, res)=>{
 
 router.post('/room', async (req, res)=>{
     try{
-    let newRoom = req.headers;
-    console.log(newRoom);
-    //function call to decode JWT into payload object goes here
-    let newRec = await post.addRoom(newRoom);
-    if (!newRec.error){
-        res.json(newRec);
-    } else{
-        res.status(404).json(newRec);
-    }
+        let newRoom = req.headers;
+        console.log(newRoom);
+        //function call to decode JWT into payload object goes here
+        let newRec = await post.addRoom(newRoom);
+        if (!newRec.error){
+            res.json(newRec);
+        } else{
+            res.status(404).json(newRec);
+        }
     }catch(e){
         console.log(e);
         res.json({horse:"shit"})

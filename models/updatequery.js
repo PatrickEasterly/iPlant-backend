@@ -74,8 +74,8 @@ async function updateRoom(roomObj){
                 return ({error:"new assigned user doesn't exist."});
             }
         }
-    return ({error:"something went wrong"});
-}
+        return ({error:"something went wrong"});
+    }
 }
 
 async function updatePlantinfo(plantinfoObj){
