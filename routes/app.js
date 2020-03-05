@@ -34,7 +34,8 @@ router.get('/user', async (req, res)=>{
 router.put('/user', async (req, res)=>{
     try{
         let updateUser = req.headers;
-        let updateRec = await put.updateUser(updateUser);    
+        let updateRec = await put.updateUser(updateUser);
+        console.log(updateRec);    
         if (!updateRec.error){
             res.json(updateRec);
         } else {
@@ -63,15 +64,15 @@ router.delete('/user', async (req, res)=>{
 
 router.post('/room', async (req, res)=>{
     try{
-    let newRoom = req.headers;
-    console.log(newRoom);
-    //function call to decode JWT into payload object goes here
-    let newRec = await post.addRoom(newRoom);
-    if (!newRec.error){
-        res.json(newRec);
-    } else{
-        res.status(404).json(newRec);
-    }
+        let newRoom = req.headers;
+        console.log(newRoom);
+        //function call to decode JWT into payload object goes here
+        let newRec = await post.addRoom(newRoom);
+        if (!newRec.error){
+            res.json(newRec);
+        } else{
+            res.status(404).json(newRec);
+        }
     }catch(e){
         console.log(e);
         res.json({horse:"shit"})
@@ -94,7 +95,8 @@ router.put('/room', async (req, res)=>{
     try{
         let updateRoom = req.headers;
         //function call to decode JWT into payload object goes here
-        let updateRec = await put.updateRoom(updateRoom);    
+        let updateRec = await put.updateRoom(updateRoom);
+        console.log(updateRec);    
         if (!updateRec.error){
             res.json(updateRec);
         } else {
