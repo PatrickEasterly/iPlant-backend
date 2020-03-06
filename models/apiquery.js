@@ -28,7 +28,7 @@ async function oneRoom(id){
 
 // get all plantinfo
 async function allPlantinfo(){
-    let allPlants = await db.any(`SELECT id, latinname, commonname FROM plantinfo`);
+    let allPlants = await db.any(`SELECT id, latinname, commonname, photo FROM plantinfo`);
     return allPlants;
 }
 
