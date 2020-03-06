@@ -8,22 +8,21 @@ async function allUsers(){
     return allUsers;
 }
 
+async function userByUsername(username){
+    let user = await db.oneOrNone(`SELECT * FROM users WHERE username='${username}';`);
+    return user;
+}
+
 // get one user, by userid
 async function oneUser(id){
     let oneUser = await db.oneOrNone(`SELECT * FROM users WHERE id=${id};`);
     let allUserPlants = await db.any(`SELECT id from plants WHERE userid=${id};`);
     console.log(allUserPlants);
-    //let allPlants = allUserPlants.map(x=> x.id);
     let plantArr = [];
     for (p of allUserPlants){
         let newPlant = await onePlant(p.id);
-        console.log(newPlant);
         plantArr.push(newPlant);
     }
-    console.log(plantArr);
-    // console.log(allPlants);
-    // allPlants = await Promise.all(allUserPlants.map(async (x) => await onePlant(x)));
-    // console.log(allPlants);
     oneUser.plants = plantArr;
     return oneUser;
 }
@@ -133,13 +132,27 @@ async function oneLike(postid){
 }
 
 // get all plants from one user 
-async function allPlantsUser(userid) {
+async function allPlantsByUser(userid) {
     let allPlants = await db.any(`SELECT * from plants WHERE userid=${userid};`);
     return allPlants;
 }
 
+async function allRoomsByUser(userid){
+    let allRooms = await db.any(`SELECT * from rooms WHERE userid=${userid};`);
+    return allRooms;
+}
+
+async function allPlantsByRoom(roomid){
+    let allPlants = await db.any(`SELECT * from plants WHERE roomid=${roomid};`);
+    return allPlants;
+}
+
+
 module.exports = {
-    allPlantsUser,
+    allPlantsByUser,
+    allRoomsByUser,
+    allPlantsByRoom,
+    userByUsername,
     allUsers,
     oneUser,
     allRooms,
