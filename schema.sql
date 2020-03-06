@@ -1,8 +1,3 @@
-create table asdf (
-    id text,
-    works text
-);
-
 create table users (
     id serial primary key,
     username text unique not null,
