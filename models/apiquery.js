@@ -4,115 +4,137 @@ const db = require('../connection');
 
 // get all users
 async function allUsers(){
-    let allUsers = await db.any(`SELECT id, username FROM users`);
+    let allUsers = await db.any(`SELECT id, username FROM users;`);
     return allUsers;
 }
 
 // get one user, by userid
 async function oneUser(id){
-    let oneUser = await db.oneOrNone(`SELECT * FROM users WHERE id=${id}`);
+    let oneUser = await db.oneOrNone(`SELECT * FROM users WHERE id=${id};`);
+    let allUserPlants = await db.any(`SELECT id from plants WHERE userid=${id};`);
+    console.log(allUserPlants);
+    //let allPlants = allUserPlants.map(x=> x.id);
+    let plantArr = [];
+    for (p of allUserPlants){
+        let newPlant = await onePlant(p.id);
+        console.log(newPlant);
+        plantArr.push(newPlant);
+    }
+    console.log(plantArr);
+    // console.log(allPlants);
+    // allPlants = await Promise.all(allUserPlants.map(async (x) => await onePlant(x)));
+    // console.log(allPlants);
+    oneUser.plants = plantArr;
     return oneUser;
 }
 
 // get all rooms
 async function allRooms(){
-    let allRooms = await db.any(`SELECT id, roomname FROM rooms`);
+    let allRooms = await db.any(`SELECT id, roomname FROM rooms;`);
     return allRooms;
 }
 
 // get one room, by roomid
 async function oneRoom(id){
-    let oneRoom = await db.oneOrNone(`SELECT * FROM rooms WHERE id=${id}`);
+    let oneRoom = await db.oneOrNone(`SELECT * FROM rooms WHERE id=${id};`);
     return oneRoom;
 }
 
 // get all plantinfo
 async function allPlantinfo(){
-    let allPlants = await db.any(`SELECT id, latinname, commonname FROM plantinfo`);
+    let allPlants = await db.any(`SELECT id, latinname, commonname FROM plantinfo;`);
     return allPlants;
 }
 
 // get one plantinfo, by id
 async function onePlantinfo(id){
-    let onePlant = await db.oneOrNone(`SELECT * FROM plantinfo WHERE id=${id}`);
+    let onePlant = await db.oneOrNone(`SELECT * FROM plantinfo WHERE id=${id};`);
     return onePlant;
 }
 
 // get all specific plants
 async function allPlants(){
-    let allPlants = await db.any(`SELECT id, plantname FROM Plants`);
+    let allPlants = await db.any(`SELECT id, plantname FROM Plants;`);
     return allPlants;
 }
 
 // get one specific plant, by id
 async function onePlant(id){
-    let onePlant = await db.oneOrNone(`SELECT * FROM Plants WHERE id=${id}`);
+    let onePlant = await db.oneOrNone(`SELECT * FROM Plants WHERE id=${id};`);
+    let plantInfo = await onePlantinfo(onePlant.plantinfoid);
+    delete onePlant.plantinfoid;
+    onePlant.plantInfo = plantInfo;
+    let room = await oneRoom(onePlant.roomid);
+    delete onePlant.roomid;
+    onePlant.room = room;
+    let water = await oneWater(id);
+    onePlant.waters = water;
     return onePlant;
 }
 
 // get all watering events
 async function allWaters(){
-    let allWaters = await db.any(`SELECT * FROM Water`);
+    let allWaters = await db.any(`SELECT * FROM Water;`);
     return allWaters;
 }
 
 // get all watering events associated with one plant, by plantid
 async function oneWater(plantid){
-    let oneWater = await db.any(`SELECT * FROM Water WHERE plantid=${plantid}`);
+    let oneWater = await db.any(`SELECT * FROM Water WHERE plantid=${plantid};`);
     return oneWater;
 }
 
 // get all data about users following each other
 async function allFollows(){
-    let allFollows = await db.any(`SELECT * FROM follow`);
+    let allFollows = await db.any(`SELECT * FROM follow;`);
     return allFollows;
 }
 
 // get data about all users one user follows, by userid
 async function oneFollow(userid){
-    let oneFollow = await db.any(`SELECT * FROM follow WHERE userid=${userid}`);
+    let oneFollow = await db.any(`SELECT * FROM follow WHERE userid=${userid};`);
     return oneFollow;
 }
 
 // get all post info
 async function allPosts(){
-    let allPosts = await db.any(`SELECT * FROM posts`);
+    let allPosts = await db.any(`SELECT * FROM posts;`);
     return allPosts;
 }
 
 // get info about one specific post
 async function onePost(id){
-    let onePost = await db.oneOrNone(`SELECT * FROM posts WHERE id=${id}`);
+    let onePost = await db.oneOrNone(`SELECT * FROM posts WHERE id=${id};`);
     return onePost;
 }
 
 // get all comments for all posts
 async function allComments(){
-    let allComments = await db.any(`SELECT * FROM comments`);
+    let allComments = await db.any(`SELECT * FROM comments;`);
     return allComments;
 }
 
 // get one specific comment by ID
 async function oneComment(id){
-    let oneComment = await db.oneOrNone(`SELECT * FROM comments WHERE id=${id}`);
+    let oneComment = await db.oneOrNone(`SELECT * FROM comments WHERE id=${id};`);
     return oneComment;
 }
 
 // get all like information
 async function allLikes(){
-    let allLikes = await db.any(`SELECT * FROM likes`);
+    let allLikes = await db.any(`SELECT * FROM likes;`);
     return allLikes;
 }
 
 // get all likes for a specific post, by ID.
 async function oneLike(postid){
-    let oneLike = await db.any(`SELECT * FROM likes WHERE postid=${postid}`);
+    let oneLike = await db.any(`SELECT * FROM likes WHERE postid=${postid};`);
     return oneLike;
 }
 
 // get all plants from one user 
 async function allPlantsUser(userid) {
-    let allPlants = await db.any(`SELECT * from plants WHERE userid=${userid}`);
+    let allPlants = await db.any(`SELECT * from plants WHERE userid=${userid};`);
     return allPlants;
 }
 

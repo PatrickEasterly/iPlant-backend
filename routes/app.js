@@ -1,17 +1,30 @@
 const express = require('express');
 const router = express.Router();
 
+const bcrypt = require('bcrypt');
+const saltRounds = 10;
+const jwt = require('jsonwebtoken');
+const SECRET = "notsosecret";
+
 const post = require('../models/addquery');
 const put = require('../models/updatequery');
 const del = require('../models/deletequery');
 const get = require('../models/apiquery');
+
+// router.post('/login', async (req, res) =>{
+//     let login = req.headers;
+//     let userInfo = await api.oneUser(login.id);
+// });
+
 
 router.post('/user', async (req, res)=>{
     try{
         let newUser = req.headers;
         let newRec = await post.addUser(newUser);
         if (!newRec.error){
-            res.json(newRec);
+            let token = jwt.sign(newRec, SECRET);
+            console.log(token);
+            res.json(token);
         } else {
             res.status(404).json(newRec);
         }
