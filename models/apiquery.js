@@ -8,22 +8,21 @@ async function allUsers(){
     return allUsers;
 }
 
+async function userByUsername(username){
+    let user = await db.oneOrNone(`SELECT * FROM users WHERE username='${username}';`);
+    return user;
+}
+
 // get one user, by userid
 async function oneUser(id){
     let oneUser = await db.oneOrNone(`SELECT * FROM users WHERE id=${id};`);
     let allUserPlants = await db.any(`SELECT id from plants WHERE userid=${id};`);
     console.log(allUserPlants);
-    //let allPlants = allUserPlants.map(x=> x.id);
     let plantArr = [];
     for (p of allUserPlants){
         let newPlant = await onePlant(p.id);
-        console.log(newPlant);
         plantArr.push(newPlant);
     }
-    console.log(plantArr);
-    // console.log(allPlants);
-    // allPlants = await Promise.all(allUserPlants.map(async (x) => await onePlant(x)));
-    // console.log(allPlants);
     oneUser.plants = plantArr;
     return oneUser;
 }
@@ -140,6 +139,7 @@ async function allPlantsUser(userid) {
 
 module.exports = {
     allPlantsUser,
+    userByUsername,
     allUsers,
     oneUser,
     allRooms,

@@ -1,25 +1,34 @@
+require('dotenv').config();
+const saltRounds = process.env.SALTROUNDS;
+const SECRET = process.env.ACCESS_TOKEN_SECRET;
 const express = require('express');
 const router = express.Router();
-
 const bcrypt = require('bcrypt');
-const saltRounds = 10;
 const jwt = require('jsonwebtoken');
-const SECRET = "notsosecret";
-
 const post = require('../models/addquery');
 const put = require('../models/updatequery');
 const del = require('../models/deletequery');
 const get = require('../models/apiquery');
+const user = require('../models/userquery');
 
-// router.post('/login', async (req, res) =>{
-//     let login = req.headers;
-//     let userInfo = await api.oneUser(login.id);
-// });
-
+//send a username and plaintext password.
+router.post('/login', async (req, res) =>{
+    let login = req.headers;
+    let userInfo = await get.userByUsername(login.username);
+    let comp = bcrypt.compareSync(login.password, userInfo.hash);
+    if (comp){
+        let payload = {...userInfo};
+        let token = jwt.sign(payload, SECRET);
+        console.log(token);
+        res.json({login:"SUCCESS!!!!!", token});
+    }
+    res.json({login:"FAILURE!!!!!"});
+});
 
 router.post('/user', async (req, res)=>{
     try{
         let newUser = req.headers;
+        newUser.hash = user.hashPassword((newUser.password), SALTROUNDS);
         let newRec = await post.addUser(newUser);
         if (!newRec.error){
             let token = jwt.sign(newRec, SECRET);
