@@ -28,7 +28,7 @@ router.post('/login', async (req, res) =>{
 router.post('/user', async (req, res)=>{
     try{
         let newUser = req.headers;
-        newUser.hash = user.hashPassword((newUser.password), SALTROUNDS);
+        newUser.hash = user.hashPassword((newUser.password || newUser.hash), SALTROUNDS);
         let newRec = await post.addUser(newUser);
         if (!newRec.error){
             let token = jwt.sign(newRec, SECRET);

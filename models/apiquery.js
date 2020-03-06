@@ -143,7 +143,7 @@ async function allRoomsByUser(userid){
 }
 
 async function allPlantsByRoom(roomid){
-    let allPlants = await db.any(`SELECT * from lants WHERE roomid=${roomid};`);
+    let allPlants = await db.any(`SELECT * from plants WHERE roomid=${roomid};`);
     return allPlants;
 }
 
