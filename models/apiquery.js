@@ -132,13 +132,26 @@ async function oneLike(postid){
 }
 
 // get all plants from one user 
-async function allPlantsUser(userid) {
+async function allPlantsByUser(userid) {
     let allPlants = await db.any(`SELECT * from plants WHERE userid=${userid};`);
     return allPlants;
 }
 
+async function allRoomsByUser(userid){
+    let allRooms = await db.any(`SELECT * from rooms WHERE userid=${userid};`);
+    return allRooms;
+}
+
+async function allPlantsByRoom(roomid){
+    let allPlants = await db.any(`SELECT * from lants WHERE roomid=${roomid};`);
+    return allPlants;
+}
+
+
 module.exports = {
-    allPlantsUser,
+    allPlantsByUser,
+    allRoomsByUser,
+    allPlantsByRoom,
     userByUsername,
     allUsers,
     oneUser,

@@ -3,6 +3,25 @@ const router = express.Router();
 const db = require('../connection');
 const api = require('../models/apiquery');
 
+router.get('/rooms/user/:id', async (req, res)=>{
+    let {id} = req.params;
+    let allRooms = await api.allRoomsByUser(id);
+    res.json(allRooms);
+});
+
+router.get('/plants/room/:id', async (req, res)=>{
+    let {id} = req.params;
+    let allPlants = await api.allPlantsByRoom(id);
+    res.json(allPlants);
+});
+
+// get all plants from one user
+router.get('/plants/user/:id', async (req, res)=>{
+    let {id} = req.params;
+    let allUserPlants = await api.allPlantsByUser(id);
+    res.json(allUserPlants);
+});
+
 router.get('/users', async (req, res)=>{
     let allUsers = await api.allUsers();
     res.json(allUsers);
@@ -41,12 +60,6 @@ router.get('/plants', async (req, res)=>{
     res.json(allPlants);
 });
 
-// get all plants from one user
-router.get('/plants/user/:id', async (req, res)=>{
-    let {id} = req.params;
-    let allUserPlants = await api.allPlantsUser(id);
-    res.json(allUserPlants);
-})
 
 router.get('/plants/:id', async (req, res)=>{
     let {id} = req.params;
@@ -108,6 +121,7 @@ router.get('/likes/:id', async (req, res)=>{
     let oneLike = await api.oneLike(id);
     res.json(oneLike);
 });
+
 
 router.get('/*',(req, res) =>{
     res.json({"api":"SUCCESS!!!"})
