@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const db = require('../connection');
-const api = require('../models/apiquery');
+const api = require('../models/getquery');
 
 router.get('/rooms/user/:id', async (req, res)=>{
     let {id} = req.params;

@@ -6,8 +6,6 @@ const express = require('express');
 const helmet = require('helmet');
 const logger = require('morgan');
 const bodyParser = require('body-parser');
-const bcrypt = require('bcrypt');
-const jwt = require('jsonwebtoken');
 const cors = require('cors');
 
 const app = express();
@@ -22,14 +20,14 @@ app.use(helmet());
 app.use(logger('dev'));
 app.use('/api', apiRouter);
 app.use(express.json());
-
 app.use(bodyParser.urlencoded({extended:false}));
 app.use(bodyParser.json());
+
 app.use('/app', appRouter);
 
 app.get('/*', (req, res) =>{
     res.json({whatisthis:"its a server for an unfinished webapp obviously"})
-})
+});
 
 server.listen(PORT, () =>{
     console.log(`server listening at ${PORT}`);
