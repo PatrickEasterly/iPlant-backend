@@ -11,6 +11,8 @@ const userRouter = require('./user');
 
 
 router.use('/user', userRouter);
+
+// This is the JWT validation check. Check if token is valid, attach token payload to req.body and call next. if not, return JSON login error.
 router.use(JWTCheck);
 
 router.get('/rooms/user/', async (req, res)=>{

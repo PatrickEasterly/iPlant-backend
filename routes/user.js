@@ -31,7 +31,7 @@ router.post('/login', async (req, res) =>{
         }
         return res.status(403).json({login:"FAILURE", error:"invalid username"});
     } catch(e){
-        return res.status(404).json({horse:"shit"})
+        return res.status(404).json({error:"something went wrong"});
     }
 });
 
@@ -54,21 +54,22 @@ router.post('/register', async (req, res)=>{
         return res.status(403).json({login:"FAILURE", error:newRec.error});
     }catch(e){
         console.log(e);
-        return res.status(404).json({horse:"shit"});
+        return res.status(404).json({error:"something went wrong"});
     }
 });
 
-// This is the JWT validation check. Check if token is valid, attach userID to req.body and call next. if not, return JSON login error.
+// This is the JWT validation check. Check if token is valid, attach token payload to req.body and call next. if not, return JSON login error.
 router.use(JWTCheck);
 
+// NEEDS TO get WRITTEN AFTER JWT REFRESH TOKENS AND TIMEOUTS ARE IMPLEMENTED!!
 router.post('/logout', async (req, res)=>{
     return res.status(404).json({horse:"shit"})
 });
 
 router.get('/user', async (req, res)=>{
     try{
-        let user = req.body;
-        let newRec = await get.oneUser(user.id);
+        let {userId} = req.body.token;
+        let newRec = await get.oneUser(userId);
         return res.json(newRec);
     }catch(e){
         console.log(e);
