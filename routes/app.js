@@ -22,7 +22,7 @@ router.post('/login', async (req, res) =>{
         }
         let comp = bcrypt.compareSync(login.password, userInfo.hash);
         if (comp){
-            let payload = {...userInfo};
+            let payload = userInfo.id;
             let token = jwt.sign(payload, SECRET);
             console.log(token);
             return res.json({login:"SUCCESS!!!!!", token});
@@ -39,7 +39,8 @@ router.post('/user', async (req, res)=>{
         newUser.hash = user.hashPassword((newUser.password || newUser.hash), SALTROUNDS);
         let newRec = await post.addUser(newUser);
         if (!newRec.error){
-            let token = jwt.sign(newRec, SECRET);
+            let userID = newRec.id;
+            let token = jwt.sign(userID, SECRET);
             console.log(token);
             res.json(token);
             //res.redirect(POST './login', body={...newUser});
@@ -60,13 +61,13 @@ router.use(async (req, res, next)=>{
     }
     console.log("after !authHeader, before jwt.verify");
     let token = authHeader.split(' ')[1];
-    jwt.verify(token, SECRET, (err, userInfo)=>{
+    jwt.verify(token, SECRET, (err, userId)=>{
         if(err){
             console.log("inside the error on verify");
             return res.status(403).json({error:"invalid token"});
         }
-        console.log(userInfo);
-        req.body.userinfo = userInfo;
+        console.log(userId);
+        req.body.userId = userId;
         console.log("===================================");
         console.log(req.body);
         next();
@@ -117,15 +118,15 @@ router.delete('/user', async (req, res)=>{
     }
 });
 
-router.get('/rooms/user/:id', async (req, res)=>{
-    let {id} = req.params;
-    let allRooms = await api.allRoomsByUser(id);
+router.get('/rooms/user/', async (req, res)=>{
+    let {userId} = req.body;
+    let allRooms = await get.allRoomsByUser(userId);
     res.json(allRooms);
 });
 
-router.get('/plants/room/:id', async (req, res)=>{
-    let {id} = req.params;
-    let allPlants = await api.allPlantsByRoom(id);
+router.get('/plants/room/', async (req, res)=>{
+    let {plantId} = req.body;
+    let allPlants = await get.allPlantsByRoom(plantId);
     res.json(allPlants);
 });
 
@@ -175,12 +176,12 @@ router.put('/room', async (req, res)=>{
 
 router.delete('/room', async (req, res)=>{
     try{
-    let delRoom = req.body;
-    //function call to decode JWT into payload object goes here
-    let delRec = await del.deleteRoom(delRoom.id);
-    if (!delRec.error){
-            return res.json(delRec);
-        }
+        let delRoom = req.body;
+        //function call to decode JWT into payload object goes here
+        let delRec = await del.deleteRoom(delRoom.id);
+        if (!delRec.error){
+                return res.json(delRec);
+            }
         res.status(404).json(updateRec);
     }catch(e){
         console.log(e);
