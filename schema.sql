@@ -3,7 +3,7 @@ create table users (
     username text unique not null,
     firstname text, 
     lastname text, 
-    email text unique not null, -- this needs to be simple encrypted with a 2 way key (one key in the secret .env file SHOULD work for all users, I just don't want to store emails as plaintext)
+    email text unique not null,
     hash text -- one way encryption hash. doesn't need to be recovered if user loses it. 
 );
 

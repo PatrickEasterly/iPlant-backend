@@ -1,5 +1,5 @@
 require('dotenv').config();
-const saltRounds = process.env.SALTROUNDS;
+const SALTROUNDS = parseInt(process.env.SALTROUNDS || 10);
 const SECRET = process.env.ACCESS_TOKEN_SECRET || "notsosecret";
 const express = require('express');
 const router = express.Router();
@@ -9,10 +9,10 @@ const post = require('../models/addquery');
 const put = require('../models/updatequery');
 const del = require('../models/deletequery');
 const get = require('../models/getquery');
-const user = require('../models/userquery');
+const {JWTCheck} = require('../models/userquery');
 
 //POST 'app/user/login'
-// This route takes JSON object as body of request. requires 'username' and 'password' keys.
+// Takes JSON object as body of request. requires 'username' and 'password' keys.
 // returns JSON object. If username is not in database, ends back status 404 and {'error' : "invalid username"}
 // If username is valid, check to see if password matches users hash. If no, returns status 403 and {'login':'FAILURE', 'error':'Invalid Password'}
 // IF username and password are correct, returns status 200 and {'login':"SUCCESS", 'token':${JWT token containing {'userID':(id for username)}}
@@ -25,7 +25,7 @@ router.post('/login', async (req, res) =>{
         }
         let comp = bcrypt.compareSync(login.password, userInfo.hash);
         if (comp){
-            let payload = {'userid':userInfo.id};
+            let payload = {'userId':userInfo.id};
             let token = jwt.sign(payload, SECRET);
             return res.json({login:"SUCCESS", token});
         }
@@ -35,46 +35,31 @@ router.post('/login', async (req, res) =>{
     }
 });
 
+//POST 'app/user/register'
+// Takes JSON object as body of request. requires username, password, email. can also take firstname, lastname.
+// if username or email already exist in DB, OR if either is not passed in, will send satus 404 and JSON {'register':"FAILURE", 'error': "(username or email) already exists"}
+//if new user is created, will send JSON {'register':"SUCCESS", 'token':${JWT token containing {'userID':(id for username)}}
 router.post('/register', async (req, res)=>{
     try{
         let newUser = req.body;
-        newUser.hash = user.hashPassword((newUser.password || newUser.hash), SALTROUNDS);
+        let newHash = await bcrypt.hash(newUser.password || newUser.hash, SALTROUNDS);
+        newUser.hash = newHash;
         let newRec = await post.addUser(newUser);
+
         if (!newRec.error){
-            let userID = newRec.id;
-            let token = jwt.sign(userID, SECRET);
-            console.log(token);
-            res.json(token);
-            //res.redirect(POST './login', body={...newUser});
-        } else {
-            return res.status(404).json(newRec);
+            let payload = {'userId':newRec.id};
+            let token = jwt.sign(payload, SECRET);
+            return res.json({register:"SUCCESS", token});
         }
+        return res.status(403).json({login:"FAILURE", error:newRec.error});
     }catch(e){
-        return res.status(404).json({horse:"shit"})
+        console.log(e);
+        return res.status(404).json({horse:"shit"});
     }
 });
 
-// This is the JWT validation check. check if token is valid, and call next. if not, return JSON login error.
-router.use(async (req, res, next)=>{
-    console.log("at the top of the verify middleware");
-    let authHeader = req.headers.authorization; // in the headers, token should be placed in{ authorization : 'BEARER (actual token)'}
-    if (!authHeader){
-        return res.status(403).json({error: "no authorization header"})
-    }
-    console.log("after !authHeader, before jwt.verify");
-    let token = authHeader.split(' ')[1];
-    jwt.verify(token, SECRET, (err, userId)=>{
-        if(err){
-            console.log("inside the error on verify");
-            return res.status(403).json({error:"invalid token"});
-        }
-        console.log(userId);
-        req.body.userId = userId;
-        console.log("===================================");
-        console.log(req.body);
-        next();
-    });
-});
+// This is the JWT validation check. Check if token is valid, attach userID to req.body and call next. if not, return JSON login error.
+router.use(JWTCheck);
 
 router.post('/logout', async (req, res)=>{
     return res.status(404).json({horse:"shit"})

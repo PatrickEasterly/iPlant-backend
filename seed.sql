@@ -1,5 +1,6 @@
 insert into users (username, firstname, lastname, email, hash)
 VALUES
+('undefined', 'undefined', 'undefined', 'undefined', 'undefined'), --quickfix to make these unavailible uniques. account can't be logged into, on purpose.
 ('patrick','patrick','easterly','pat@pat.com','$2b$10$SsoEEoyE0KBEpzKnsbGpQ.pR6Vg.i3JELnRxLOAoH9EHv0d6stpVi'),
 ('catie','catie','evans','catie@catie.com','$2b$10$Kgsum6c2JN6OfDd1fbMzOuuMjU0T2bE8oHCJcvu0ZotHg5D2ZDakK'),
 ('austin','austin','dryden','austin@austin.com','$2b$10$PpmS6WjGpkwHb/Po4i7.VOYcE17T2b5KIL1jfqs34pAGfcgMYQcGW');
