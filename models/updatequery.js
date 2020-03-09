@@ -53,10 +53,10 @@ async function updateRoom(roomObj){
                 updateString += ` roomname='${roomObj.roomname}',`;
             }
             if (roomObj.hightemp){
-                updateString += ` hightemp=${roomObj.hightemp},`;
+                updateString += ` hightemp=${parseInt(roomObj.hightemp)},`;
             }
             if (roomObj.lowtemp){
-                updateString += ` lowtemp=${roomObj.lowtemp},`;
+                updateString += ` lowtemp=${parseInt(roomObj.lowtemp)},`;
             }
             if (roomObj.lightamount){
                 updateString += ` lightamount='${roomObj.lightamount}',`;
@@ -69,9 +69,11 @@ async function updateRoom(roomObj){
         return {error : "invalid id"};
     } catch(e){
         console.log(e);
-        if (e.detail.includes("present")){
-            if (e.detail.includes("users")){
-                return ({error:"new assigned user doesn't exist."});
+        if(e.detail){
+            if (e.detail.includes("present")){
+                if (e.detail.includes("users")){
+                    return ({error:"new assigned user doesn't exist."});
+                }
             }
         }
         return ({error:"something went wrong"});

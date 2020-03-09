@@ -2,7 +2,7 @@ const db = require('../connection');
 
 // query functions to create records in postgres.
 
-async function addUser({username, firstname, lastname, email, hash}){
+async function addUser({username, firstname="John", lastname="Doe", email, hash}){
     try{
         let newRec = await db.one(`insert into users (username, firstname, lastname, email, hash)
         VALUES
@@ -22,17 +22,19 @@ async function addUser({username, firstname, lastname, email, hash}){
     }
 }
 
-async function addRoom({userid, roomname, hightemp, lowtemp, lightamount}){
+async function addRoom({userid, roomname = "default name", hightemp=77, lowtemp=66, lightamount="full"}){
     try{
         let newRec = await db.one(`insert into rooms (userid, roomname, hightemp, lowtemp, lightamount)
         VALUES
-        ('${userid}','${roomname}','${hightemp}','${lowtemp}','${lightamount}') RETURNING *;`);
+        ('${userid}','${roomname}',${parseInt(hightemp)},${parseInt(lowtemp)},'${lightamount}') RETURNING *;`);
         return newRec;
     } catch(e){
         console.log(e);
-        if (e.detail.includes("present")){
-            if (e.detail.includes("users")){
-                return ({error:"assigned user doesn't exist."});
+        if(e.detail){
+            if (e.detail.includes("present")){
+                if (e.detail.includes("users")){
+                    return ({error:"assigned user doesn't exist."});
+                }
             }
         }
         return ({error:"something went wrong"});
