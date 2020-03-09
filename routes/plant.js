@@ -34,7 +34,7 @@ router.get('/room/', async (req, res)=>{
 // returns object for newly created plant.
 router.post('/', async (req, res)=>{
     try{
-    let newPlant = req.body;
+    let newPlant = {...req.body};
     newPlant.userid = req.body.token.userid;
     console.table(newPlant);
     let newRec = await post.addPlant(newPlant);
@@ -54,7 +54,7 @@ router.post('/', async (req, res)=>{
 // returns verbose plant info, including room and plantinfo, and all watering events.
 router.get('/', async (req, res)=>{
     try{
-    let plant = req.body;
+    let plant = {...req.body};
     let newRec = await get.onePlant(plant.id);
     if(req.body.token.userid == newRec.userid){
         return res.json(newRec);
@@ -72,13 +72,10 @@ router.get('/', async (req, res)=>{
 // if update is success, returns whole object of modified plant.
 router.put('/', async (req, res)=>{
     try{
-        let updatePlant = req.body;
+        let updatePlant = {...req.body};
         let {userid} = req.body.token;
-        console.log(updatePlant);
-        console.log(userid);
-        let plant = await get.onePlant(updatePlant.id);
+        let plant = await get.onePlantSimple(updatePlant.id);
         if(plant.userid == userid){
-            console.log("usercheck passed!");
             let updateRec = await put.updatePlant(updatePlant);    
             if (!updateRec.error){
                 return res.json(updateRec);
@@ -99,7 +96,7 @@ router.put('/', async (req, res)=>{
 router.delete('/', async (req, res)=>{
     try{
         let delPlant = req.body.id;
-        let plant = await get.onePlant(delPlant);
+        let plant = await get.onePlantSimple(delPlant);
         if(plant.userid == req.body.token.userid){
             let delRec = await del.deletePlant(delPlant);
             if (!delRec.error){

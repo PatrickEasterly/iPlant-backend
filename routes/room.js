@@ -10,7 +10,6 @@ const get = require('../models/getquery');
 // returns array of all room ojects.
 router.get('/', async (req, res)=>{
     try{
-        console.log(req.body.token);
         let allRooms = await get.allRoomsByUser(req.body.token.userid);
         return res.json(allRooms);
     } catch(e){
@@ -25,9 +24,8 @@ router.get('/', async (req, res)=>{
 // returns object for newly added room.
 router.post('/', async (req, res)=>{
     try{
-        let newRoom = req.body;
+        let newRoom = {...req.body};
         newRoom.userid = req.body.token.userid;
-        console.log(newRoom);
         let newRec = await post.addRoom(newRoom);
         if (!newRec.error){
             return res.json(newRec);
@@ -59,11 +57,10 @@ router.post('/', async (req, res)=>{
 // Returns object for modified room.
 router.put('/', async (req, res)=>{
     try{
-        let updateRoom = req.body;
+        let updateRoom = {...req.body};
         let oldRoom = await get.oneRoom(updateRoom.id);
         if(oldRoom.userid == req.body.token.userid){
             let updateRec = await put.updateRoom(updateRoom);
-            console.log(updateRec);    
             if (!updateRec.error){
                 return res.json(updateRec);
             } 

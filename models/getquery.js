@@ -73,6 +73,12 @@ async function onePlant(id){
     return onePlant;
 }
 
+// get one plantinfo, by id
+async function onePlantSimple(id){
+    let onePlant = await db.oneOrNone(`SELECT * FROM plants WHERE id=${id};`);
+    return onePlant;
+}
+
 // get all watering events
 async function allWaters(){
     let allWaters = await db.any(`SELECT * FROM Water;`);
@@ -163,6 +169,7 @@ module.exports = {
     onePlantinfo,
     allPlants,
     onePlant,
+    onePlantSimple,
     allWaters,
     oneWater,
     allFollows,

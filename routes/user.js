@@ -18,7 +18,7 @@ const {JWTCheck} = require('../models/userquery');
 // IF username and password are correct, returns status 200 and {'login':"SUCCESS", 'token':${JWT token containing {'userid':(id for username)}}
 router.post('/login', async (req, res) =>{
     try{
-        let login = req.body;
+        let login = {...req.body};
         let userInfo = await get.userByUsername(login.username);
         if(!userInfo){
             return res.status(404).json({error:"invalid username"});
@@ -31,6 +31,7 @@ router.post('/login', async (req, res) =>{
         }
         return res.status(403).json({login:"FAILURE", error:"invalid username"});
     } catch(e){
+        console.log(e);
         return res.status(404).json({error:"something went wrong"});
     }
 });
@@ -41,7 +42,7 @@ router.post('/login', async (req, res) =>{
 // if new user is created, will send JSON {'register':"SUCCESS", 'token':${JWT token containing {'userid':(id for username)}}
 router.post('/register', async (req, res)=>{
     try{
-        let newUser = req.body;
+        let newUser = {...req.body};
         let newHash = await bcrypt.hash(newUser.password || newUser.hash, SALTROUNDS);
         newUser.hash = newHash;
         let newRec = await post.addUser(newUser);
@@ -86,13 +87,11 @@ router.get('/', async (req, res)=>{
 // does not modify record, and returns status (403) and {error : '(username or email) already exists'}
 router.put('/', async (req, res)=>{
     try{
-        let updateUser = req.body;
+        let updateUser = {...req.body};
         updateUser.id = req.body.token.userid;
         let updateRec = await put.updateUser(updateUser);
-        console.log(updateRec);    
+
         if (!updateRec.error){
-            console.log("NEW RECORD WRITTEN!!");
-            console.log(updateRec);
             return res.json(updateRec);
         }
         return res.status(403).json(updateRec);
@@ -109,9 +108,8 @@ router.put('/', async (req, res)=>{
 router.delete('/', async (req, res)=>{
     try{
         let {userid} = req.body.token;
-        console.log("DELETING USER!!!");
         let delRec = await del.deleteUser(userid);
-        console.log(delRec);
+        
         if (!delRec.error){
             return res.json(delRec);
         }

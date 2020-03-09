@@ -82,8 +82,10 @@ async function addPlant({userid, roomid, plantinfoid, plantname}){
     }
 }
 
-async function addWater({plantid, userid, watertime}){
+async function addWater({plantid, userid}){
     try{
+        watertime = new Date;
+        console.log(water);
         let newRec = await db.one(`insert into water (plantid, userid, watertime)
         VALUES
         ('${plantid}', ${userid} ,'${watertime}') RETURNING *;`);

@@ -1,13 +1,16 @@
 const express = require('express');
 const router = express.Router();
 const post = require('../models/addquery');
-const put = require('../models/updatequery');
 const del = require('../models/deletequery');
 const get = require('../models/getquery');
 
+//POST '/app/water'
 router.post('/', async (req, res)=>{
     try{
-        let newWater = req.body;
+        let newWater = {};
+        newWater.plantid = req.body.plantid;
+        newWater.userid = req.body.token.userid;
+        let plant = await get.onePlant();
         let newRec = await post.addWater(newWater);
         if (!newRec.error){
             return res.json(newRec);
@@ -19,6 +22,7 @@ router.post('/', async (req, res)=>{
     }
 });
 
+//GET '/app/water'
 router.get('/', async (req, res)=>{
     try{
         let Water = req.body;
@@ -30,6 +34,7 @@ router.get('/', async (req, res)=>{
     }
 });
 
+//DEL '/app/water'
 router.delete('/', async (req, res)=>{
     try{
         let delWater = req.body;
