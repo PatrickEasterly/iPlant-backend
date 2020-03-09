@@ -30,7 +30,7 @@ router.get('/', async (req, res)=>{
     }
 });
 
-router.put('/', async (req, res)=>{
+router.put('/', async (req, res)=>{   
     try{
     let updatePlantinfo = req.body;
     let updateRec = await put.updatePlantinfo(updatePlantinfo);    
@@ -45,7 +45,7 @@ router.put('/', async (req, res)=>{
 });
 
 router.delete('/', async (req, res)=>{
-    res.status(404).json({error:"JK you can't delete plant info records. thats just not OK"});
+    return res.status(404).json({error:"JK you can't delete plant info records. thats just not OK"});
     // try{
     //     let delPlantinfo = req.body;
     //     let delRec = await del.deletePlantinfo(delPlantinfo.id);

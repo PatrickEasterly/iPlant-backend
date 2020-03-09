@@ -45,7 +45,7 @@ async function addPlantinfo({latinname, commonname, waterneeds, sunlight, lowtem
     try{
         let newRec = await db.one(`INSERT INTO plantinfo (latinname, commonname, waterneeds, sunlight, lowtemp, soiltype, soilph, about, planttype, photo) 
         VALUES 
-        ('${latinname}', '${commonname}', '${waterneeds}', '${sunlight}', ${lowtemp}, '${soiltype}', '${soilph}', '${about}', '${planttype}', '${photo}') RETURNING *;`);
+        ('${latinname}', '${commonname}', '${waterneeds}', '${sunlight}', ${parseInt(lowtemp)}, '${soiltype}', '${soilph}', '${about}', '${planttype}', '${photo}') RETURNING *;`);
         return newRec;
     } catch(e){
         console.log(e);
@@ -55,21 +55,27 @@ async function addPlantinfo({latinname, commonname, waterneeds, sunlight, lowtem
 
 async function addPlant({userid, roomid, plantinfoid, plantname}){
     try{
-    let newRec = await db.one(`insert into plants (userid, roomid, plantinfoid, plantname)
-    VALUES
-    ('${userid}','${roomid}','${plantinfoid}','${plantname}') RETURNING *;`);
-    return newRec;
+        let room = await db.one(`SELECT userid FROM rooms WHERE id=${roomid}`);
+        if(userid == room.userid){
+            let newRec = await db.one(`insert into plants (userid, roomid, plantinfoid, plantname)
+            VALUES
+            (${parseInt(userid)},${parseInt(roomid)},${parseInt(plantinfoid)},'${plantname}') RETURNING *;`);
+            return newRec;
+        }
+        return ({'error': "room does not belong to user."});
     } catch(e){
         console.log(e);
-        if (e.detail.includes("present")){
-            if (e.detail.includes("users")){
-                return ({error:"assigned user doesn't exist."});
-            }
-            if (e.detail.includes("room")){
-                return ({error:"assigned room doesn't exist."});
-            }
-            if (e.detail.includes("plantinfo")){
-                return ({error:"assigned plantinfo doesn't exist."});
+        if(e.detail){
+            if (e.detail.includes("present")){
+                if (e.detail.includes("users")){
+                    return ({error:"assigned user doesn't exist."});
+                }
+                if (e.detail.includes("room")){
+                    return ({error:"assigned room doesn't exist."});
+                }
+                if (e.detail.includes("plantinfo")){
+                    return ({error:"assigned plantinfo doesn't exist."});
+                }
             }
         }
         return ({error:"something went wrong"});

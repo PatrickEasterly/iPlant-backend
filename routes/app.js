@@ -1,9 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const post = require('../models/addquery');
-const put = require('../models/updatequery');
-const del = require('../models/deletequery');
-const get = require('../models/getquery');
+
 const {JWTCheck} = require('../models/userquery');
 const userRouter = require('./user');
 const roomRouter = require('./room');
@@ -15,12 +12,13 @@ const commentRouter = require('./comment');
 const followRouter = require('./follow');
 const likesRouter = require('./likes');
 
-router.use('/user', userRouter);
+router.use('/user', userRouter); //DEBUGGED AND COMMENTED
 
 // This is the JWT validation check. Check if token is valid, attach token payload to req.body and call next. if not, return JSON login error.
 router.use(JWTCheck);
 
-router.use('/room', roomRouter);
+//ALL routes past this point require a valid JWT with userid info to work.
+router.use('/room', roomRouter);  //DEBUGGED AND COMMENTED
 router.use('/plantinfo', plantinfoRouter);
 router.use('/plant', plantRouter);
 router.use('/water', waterRouter);

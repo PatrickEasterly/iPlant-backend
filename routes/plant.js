@@ -5,61 +5,112 @@ const put = require('../models/updatequery');
 const del = require('../models/deletequery');
 const get = require('../models/getquery');
 
+//GET '/app/plant/room'
+// Must be logged in via JWT. Must pass {roomid:(num)} in body.
+// Checks if room belongs to logged in user, selects all plants in that room.
+// returns object with error key if something isn't right.
+// Returns object with 2 keys. {room:(room object), "plants:(array of all plants in room)"}
 router.get('/room/', async (req, res)=>{
-    let {plantId} = req.body;
-    let allPlants = await get.allPlantsByRoom(plantId);
-    res.json(allPlants);
+    try{
+        let {userid} = req.body.token;
+        let {roomid} = req.body;
+        let room = await get.oneRoom(roomid);
+        if(room.userid == userid){
+            let allPlants = await get.allPlantsByRoom(roomid);
+            return res.json({room,'plants':allPlants});
+        }
+        return res.status(403).json({'error':"logged in user does not have access to this room"});
+    } catch(e){
+        console.log(e);
+        return res.status(404).json({error:"something went wrong"});
+    }
 });
 
+//POST '/app/plant' 
+// Must be logged in via JWT. takes in body {roomid:(int), plantinfoid:(int), plantname:(string)} userid from JWT.
+// checks to see if room for plant belongs to logged in user.
+// if userid != room.userid returns JSON error object.
+// if not all required fields are passed, returns JSON error object.
+// returns object for newly created plant.
 router.post('/', async (req, res)=>{
     try{
     let newPlant = req.body;
+    newPlant.userid = req.body.token.userid;
+    console.table(newPlant);
     let newRec = await post.addPlant(newPlant);
     if (!newRec.error){
         return res.json(newRec);
     }
-    res.status(404).json(newRec);
+    return res.status(403).json(newRec);
     }catch(e){
         console.log(e);
-        res.json({horse:"shit"})
+        return res.status(404).json({error:"something went wrong"});
     }
 });
 
+//GET '/app/plant'
+// Must be logged in via JWT. takes in body {id:(num)}. userid from JWT.
+// if logged in user does not own plant, returns JSON error object.
+// returns verbose plant info, including room and plantinfo, and all watering events.
 router.get('/', async (req, res)=>{
     try{
     let plant = req.body;
     let newRec = await get.onePlant(plant.id);
-    res.json(newRec);
+    if(req.body.token.userid == newRec.userid){
+        return res.json(newRec);
+    }
+    return res.status(403).json({error:"user does not have access to this plant"});
     }catch(e){
         console.log(e);
-        res.json({horse:"shit"})
+        return res.status(404).json({error:"something went wrong"});
     }
 });
 
+//PUT '/app/plant'
+// must be logged in via JWT. takes in at least 1 key in body {userid:(num), roomid:(num), plantinfoid:(num), plantname:(string)}
+// if user does not own new room, returns JSON error object.
+// if update is success, returns whole object of modified plant.
 router.put('/', async (req, res)=>{
     try{
-        let updateRec = await put.updatePlant(updatePlant);    
-        if (!updateRec.error){
-            return res.json(updateRec);
+        let updatePlant = req.body;
+        let {userid} = req.body.token;
+        console.log(updatePlant);
+        console.log(userid);
+        let plant = await get.onePlant(updatePlant.id);
+        if(plant.userid == userid){
+            console.log("usercheck passed!");
+            let updateRec = await put.updatePlant(updatePlant);    
+            if (!updateRec.error){
+                return res.json(updateRec);
+            }
+            return res.status(404).json(updateRec);
         }
-        res.status(404).json(updateRec);
+        return res.status(403).json({error:'Plant does not belong to user'});
     }catch(e){
         console.log(e);
-        res.json({horse:"shit"})
+        return res.status(404).json({error:"something went wrong"});
     }
 });
 
+//DELETE '/app/plant'
+// must be logged in via JWT. takes in body {id:(num)}. userid from JWT.
+// if logged in user does not own plant, returns JSON error object.
+// deletes plant, returns deleted plant as JSON object.
 router.delete('/', async (req, res)=>{
     try{
-    let delPlant = req.body;
-    let delRec = await del.deletePlant(delPlant.id);
-    if (!delRec.error){
-            return res.json(delRec);
+        let delPlant = req.body.id;
+        let plant = await get.onePlant(delPlant);
+        if(plant.userid == req.body.token.userid){
+            let delRec = await del.deletePlant(delPlant);
+            if (!delRec.error){
+                    return res.json(delRec);
+                }
+            return res.status(404).json(updateRec);
         }
-        res.status(404).json(updateRec);
+        return res.status(403).json({error:'Plant does not belong to user'});
     }catch(e){
         console.log(e);
-        res.json({horse:"shit"})
+        return res.status(404).json({error:"something went wrong"});
     }
 });
 

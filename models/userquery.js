@@ -9,6 +9,7 @@ const SECRET = process.env.ACCESS_TOKEN_SECRET || "notsosecret";
 // IF Token is valid, sets req.body.token to contents of token payload for use in future routes.
 function JWTCheck (req, res, next){
     try{
+        delete req.body.token;
         let authHeader = req.headers.authorization; // in the headers, token should be placed in{ authorization : 'BEARER ${token}'}
         if (!authHeader){
             return res.status(403).json({error: "no authorization header"});
