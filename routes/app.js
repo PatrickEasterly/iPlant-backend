@@ -20,7 +20,7 @@ router.use(JWTCheck);
 //ALL routes past this point require a valid JWT with userid info to work.
 router.use('/room', roomRouter);  //DEBUGGED AND COMMENTED
 router.use('/plantinfo', plantinfoRouter);
-router.use('/plant', plantRouter);
+router.use('/plant', plantRouter); //DEBUGGED AND COMMENTED
 router.use('/water', waterRouter);
 router.use('/post', postRouter);
 router.use('/comment', commentRouter);
