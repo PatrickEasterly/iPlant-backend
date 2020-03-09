@@ -15,7 +15,7 @@ const {JWTCheck} = require('../models/userquery');
 // Takes JSON object as body of request. requires 'username' and 'password' keys.
 // returns JSON object. If username is not in database, ends back status 404 and {'error' : "invalid username"}
 // If username is valid, check to see if password matches users hash. If no, returns status 403 and {'login':'FAILURE', 'error':'Invalid Password'}
-// IF username and password are correct, returns status 200 and {'login':"SUCCESS", 'token':${JWT token containing {'userID':(id for username)}}
+// IF username and password are correct, returns status 200 and {'login':"SUCCESS", 'token':${JWT token containing {'userid':(id for username)}}
 router.post('/login', async (req, res) =>{
     try{
         let login = req.body;
@@ -25,7 +25,7 @@ router.post('/login', async (req, res) =>{
         }
         let comp = bcrypt.compareSync(login.password, userInfo.hash);
         if (comp){
-            let payload = {'userId':userInfo.id};
+            let payload = {'userid':userInfo.id};
             let token = jwt.sign(payload, SECRET);
             return res.json({login:"SUCCESS", token});
         }
@@ -38,7 +38,7 @@ router.post('/login', async (req, res) =>{
 //POST 'app/user/register'
 // Takes JSON object as body of request. requires username, password, email. can also take firstname, lastname.
 // if username or email already exist in DB, OR if either is not passed in, will send satus 404 and JSON {'register':"FAILURE", 'error': "(username or email) already exists"}
-//if new user is created, will send JSON {'register':"SUCCESS", 'token':${JWT token containing {'userID':(id for username)}}
+//if new user is created, will send JSON {'register':"SUCCESS", 'token':${JWT token containing {'userid':(id for username)}}
 router.post('/register', async (req, res)=>{
     try{
         let newUser = req.body;
@@ -47,7 +47,7 @@ router.post('/register', async (req, res)=>{
         let newRec = await post.addUser(newUser);
 
         if (!newRec.error){
-            let payload = {'userId':newRec.id};
+            let payload = {'userid':newRec.id};
             let token = jwt.sign(payload, SECRET);
             return res.json({register:"SUCCESS", token});
         }
@@ -70,12 +70,12 @@ router.post('/logout', async (req, res)=>{
 // returns full info card, including plants, rooms, etc. for logged in user.
 router.get('/', async (req, res)=>{
     try{
-        let {userId} = req.body.token;
-        let newRec = await get.oneUser(userId);
+        let {userid} = req.body.token;
+        let newRec = await get.oneUser(userid);
         return res.json(newRec);
     }catch(e){
         console.log(e);
-        return res.json({horse:"shit"})
+        return res.status(404).json({error:"something went wrong"});
     }
 });
 
@@ -86,7 +86,7 @@ router.get('/', async (req, res)=>{
 router.put('/', async (req, res)=>{
     try{
         let updateUser = req.body;
-        updateUser.id = req.body.token.userId;
+        updateUser.id = req.body.token.userid;
         let updateRec = await put.updateUser(updateUser);
         console.log(updateRec);    
         if (!updateRec.error){
@@ -97,18 +97,18 @@ router.put('/', async (req, res)=>{
         return res.status(403).json(updateRec);
     }catch(e){
         console.log(e);
-        res.json({horse:"shit"})
+        return res.status(404).json({error:"something went wrong"});
     }
 });
 
 // DELETE '/app/user'
-// Removes logged in user. Deletes all records in all tables associated with their userId.
-// logs user out by default, as the userId in JWT token is for a non-existent user.
+// Removes logged in user. Deletes all records in all tables associated with their userid.
+// logs user out by default, as the userid in JWT token is for a non-existent user.
 router.delete('/', async (req, res)=>{
     try{
-        let {userId} = req.body.token;
+        let {userid} = req.body.token;
         console.log("DELETING USER!!!");
-        let delRec = await del.deleteUser(userId);
+        let delRec = await del.deleteUser(userid);
         console.log(delRec);
         if (!delRec.error){
             return res.json(delRec);
@@ -116,7 +116,7 @@ router.delete('/', async (req, res)=>{
         return res.status(404).json(updateRec);
     }catch(e){
         console.log(e);
-        res.json({horse:"shit"})
+        return res.status(404).json({error:"something went wrong"});
     }
 });
 

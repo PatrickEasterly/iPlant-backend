@@ -5,24 +5,27 @@ const put = require('../models/updatequery');
 const del = require('../models/deletequery');
 const get = require('../models/getquery');
 
-router.get('/room/user/', async (req, res)=>{
-    console.log(req.body);
-    let {userId} = req.body.token;
-    let allRooms = await get.allRoomsByUser(userId);
-    res.json(allRooms);
+// GET '/app/room' 
+// Gets ALL rooms for logged in user.
+router.get('/', async (req, res)=>{
+    try{
+        console.log(req.body.token);
+        let allRooms = await get.allRoomsByUser(req.body.token.userid);
+        return res.json(allRooms);
+    } catch(e){
+        console.log(e);
+        return res.status(404).json({error:"something went wrong"});
+    }
 });
 
-router.get('/plants/room/', async (req, res)=>{
-    let {plantId} = req.body;
-    let allPlants = await get.allPlantsByRoom(plantId);
-    res.json(allPlants);
-});
-
-router.post('/room', async (req, res)=>{
+//POST '/app/room' 
+// Adds new room assigned to logged in user. needs {roomname, hightemp, lowtemp, lightamount}.
+// uses default values if not all are passed in.
+router.post('/', async (req, res)=>{
     try{
         let newRoom = req.body;
+        newRoom.userid = req.body.token.userid;
         console.log(newRoom);
-        //function call to decode JWT into payload object goes here
         let newRec = await post.addRoom(newRoom);
         if (!newRec.error){
             return res.json(newRec);
@@ -34,43 +37,57 @@ router.post('/room', async (req, res)=>{
     }
 });
 
-router.get('/room', async (req, res)=>{
-    try{
-        let room = req.body;
+// OLD GET '/app/room' that would get 1 room based on req.body.room.id
+// router.get('/', async (req, res)=>{
+//     try{
+//         let room = req.body;
+//         let { userid } = req.body.token;
         
-        let newRec = await get.oneRoom(room.id);
-        res.json(newRec);
-    }catch(e){
-        console.log(e);
-        res.json({horse:"shit"})
-    }
-});
+//         let newRec = await get.oneRoom(room.id);
+//         res.json(newRec);
+//     }catch(e){
+//         console.log(e);
+//         res.json({horse:"shit"})
+//     }
+// });
 
-router.put('/room', async (req, res)=>{
+//PUT '/app/room'
+// modifies existing room (only fields passed as body keys)and sends back modified room object as JSON, if room belongs to logged in user.
+// Sends back error JSON if user does not own room, or if integer fields can't be parsed for integers.
+router.put('/', async (req, res)=>{
     try{
         let updateRoom = req.body;
-        
-        let updateRec = await put.updateRoom(updateRoom);
-        console.log(updateRec);    
-        if (!updateRec.error){
-            return res.json(updateRec);
-        } 
-        res.status(404).json(updateRec);
+        let oldRoom = await get.oneRoom(updateRoom.id);
+        if(oldRoom.userid == req.body.token.userid){
+            let updateRec = await put.updateRoom(updateRoom);
+            console.log(updateRec);    
+            if (!updateRec.error){
+                return res.json(updateRec);
+            } 
+            return res.status(404).json(updateRec);
+        }
+        return res.status(403).json({error:"user not authorized"});
     }catch(e){
         console.log(e);
         res.json({horse:"shit"})
     }
 });
 
-router.delete('/room', async (req, res)=>{
+//DELETE '/app/room'
+// Deletes room (req.body.id) IF room belongs to logged in user.
+// otherwise sends back error JSON.
+router.delete('/', async (req, res)=>{
     try{
-        let delRoom = req.body;
-        //function call to decode JWT into payload object goes here
-        let delRec = await del.deleteRoom(delRoom.id);
-        if (!delRec.error){
-                return res.json(delRec);
-            }
-        res.status(404).json(updateRec);
+        let delRoom = req.body.id;
+        let oldRoom = await get.oneRoom(delRoom);
+        if(oldRoom.userid == req.body.token.userid){
+            let delRec = await del.deleteRoom(delRoom);
+            if (!delRec.error){
+                    return res.json(delRec);
+                }
+            return res.status(404).json(updateRec);
+        }
+        return res.status(403).json({'error':"User not authorized to delete room"});
     }catch(e){
         console.log(e);
         res.json({horse:"shit"})

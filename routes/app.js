@@ -69,6 +69,13 @@ router.delete('/plantinfo', async (req, res)=>{
     // }
 });
 
+
+router.get('/plant/room/', async (req, res)=>{
+    let {plantId} = req.body;
+    let allPlants = await get.allPlantsByRoom(plantId);
+    res.json(allPlants);
+});
+
 router.post('/plant', async (req, res)=>{
     try{
     let newPlant = req.body;

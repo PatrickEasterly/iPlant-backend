@@ -21,7 +21,8 @@ async function deleteUser(id){
 
 async function deleteRoom(id){
     try{
-        let plants = await db.any(`DELETE FROM plants WHERE roomid=${id};`);
+        let plants = await db.any(`SELECT id FROM plants WHERE roomid=${id};`);
+        plants.map(plant => deletePlant(plant.id));
         let delRec = await db.any(`DELETE FROM Rooms WHERE id=${id} RETURNING *;`);
         return delRec;
     } catch(e){
