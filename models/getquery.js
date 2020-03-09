@@ -75,7 +75,7 @@ async function onePlant(id){
 
 // get one plantinfo, by id
 async function onePlantSimple(id){
-    let onePlant = await db.oneOrNone(`SELECT * FROM plants WHERE id=${id};`);
+    let onePlant = await db.oneOrNone(`SELECT userid FROM plants WHERE id=${id};`);
     return onePlant;
 }
 
@@ -88,6 +88,11 @@ async function allWaters(){
 // get all watering events associated with one plant, by plantid
 async function oneWater(plantid){
     let oneWater = await db.any(`SELECT * FROM Water WHERE plantid=${plantid};`);
+    return oneWater;
+}
+
+async function oneWaterSimple(id){
+    let oneWater = await db.oneOrNone(`SELECT * FROM Water WHERE id=${id};`);
     return oneWater;
 }
 
@@ -172,6 +177,7 @@ module.exports = {
     onePlantSimple,
     allWaters,
     oneWater,
+    oneWaterSimple,
     allFollows,
     oneFollow,
     allPosts,

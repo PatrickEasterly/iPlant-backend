@@ -75,14 +75,17 @@ router.put('/', async (req, res)=>{
         let updatePlant = {...req.body};
         let {userid} = req.body.token;
         let plant = await get.onePlantSimple(updatePlant.id);
-        if(plant.userid == userid){
-            let updateRec = await put.updatePlant(updatePlant);    
-            if (!updateRec.error){
-                return res.json(updateRec);
+        if(plant){
+            if(plant.userid == userid){
+                let updateRec = await put.updatePlant(updatePlant);    
+                if (!updateRec.error){
+                    return res.json(updateRec);
+                }
+                return res.status(404).json(updateRec);
             }
-            return res.status(404).json(updateRec);
+            return res.status(403).json({error:'Plant does not belong to user'});
         }
-        return res.status(403).json({error:'Plant does not belong to user'});
+        return res.status(403).json({error:"plant does not exist."});
     }catch(e){
         console.log(e);
         return res.status(404).json({error:"something went wrong"});
@@ -97,14 +100,17 @@ router.delete('/', async (req, res)=>{
     try{
         let delPlant = req.body.id;
         let plant = await get.onePlantSimple(delPlant);
-        if(plant.userid == req.body.token.userid){
-            let delRec = await del.deletePlant(delPlant);
-            if (!delRec.error){
-                    return res.json(delRec);
-                }
-            return res.status(404).json(updateRec);
+        if(plant){
+            if(plant.userid == req.body.token.userid){
+                let delRec = await del.deletePlant(delPlant);
+                if (!delRec.error){
+                        return res.json(delRec);
+                    }
+                return res.status(404).json(updateRec);
+            }
+            return res.status(403).json({error:'Plant does not belong to user'});
         }
-        return res.status(403).json({error:'Plant does not belong to user'});
+        return res.status(403).json({error:"plant does not exist."});
     }catch(e){
         console.log(e);
         return res.status(404).json({error:"something went wrong"});
