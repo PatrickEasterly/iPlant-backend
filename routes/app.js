@@ -7,6 +7,7 @@ const get = require('../models/getquery');
 const {JWTCheck} = require('../models/userquery');
 const userRouter = require('./user');
 const roomRouter = require('./room');
+const plantinfoRouter = require('./plantinfo');
 
 router.use('/user', userRouter);
 
@@ -14,61 +15,7 @@ router.use('/user', userRouter);
 router.use(JWTCheck);
 
 router.use('/room', roomRouter);
-
-router.post('/plantinfo', async (req, res)=>{
-    try{
-    let newPlantinfo = req.body;
-    let newRec = await post.addPlantinfo(newPlantinfo);
-    if (!newRec.error){
-        return res.json(newRec);
-    }
-    res.status(404).json(newRec);
-    }catch(e){
-        console.log(e);
-        res.json({horse:"shit"})
-    }
-});
-
-router.get('/plantinfo', async (req, res)=>{
-    try{
-    let plantinfo = req.body;
-    let newRec = await get.onePlantinfo(plantinfo.id);
-    res.json(newRec);
-    }catch(e){
-        console.log(e);
-        res.json({horse:"shit"})
-    }
-});
-
-router.put('/plantinfo', async (req, res)=>{
-    try{
-    let updatePlantinfo = req.body;
-    let updateRec = await put.updatePlantinfo(updatePlantinfo);    
-        if (!updateRec.error){
-            return res.json(updateRec);
-        }
-        res.status(404).json(updateRec);
-    }catch(e){
-        console.log(e);
-        res.json({horse:"shit"})
-    }
-});
-
-router.delete('/plantinfo', async (req, res)=>{
-    res.status(404).json({error:"JK you can't delete plant info records. thats just not OK"});
-    // try{
-    //     let delPlantinfo = req.body;
-    //     let delRec = await del.deletePlantinfo(delPlantinfo.id);
-    //     if (!delRec.error){
-        //     return res.json(delRec);
-        // }
-        // res.status(404).json(updateRec);
-    // }catch(e){
-    //     console.log(e);
-    //     res.json({horse:"shit"})
-    // }
-});
-
+router.use('/plantinfo', plantinfoRouter);
 
 router.get('/plant/room/', async (req, res)=>{
     let {plantId} = req.body;

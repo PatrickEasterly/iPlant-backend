@@ -33,7 +33,7 @@ router.post('/', async (req, res)=>{
         res.status(404).json(newRec);
     }catch(e){
         console.log(e);
-        res.json({horse:"shit"})
+        return res.status(404).json({error:"something went wrong"});
     }
 });
 
@@ -69,7 +69,7 @@ router.put('/', async (req, res)=>{
         return res.status(403).json({error:"user not authorized"});
     }catch(e){
         console.log(e);
-        res.json({horse:"shit"})
+        return res.status(404).json({error:"something went wrong"});
     }
 });
 
@@ -90,7 +90,7 @@ router.delete('/', async (req, res)=>{
         return res.status(403).json({'error':"User not authorized to delete room"});
     }catch(e){
         console.log(e);
-        res.json({horse:"shit"})
+        return res.status(404).json({error:"something went wrong"});
     }
 });
 
