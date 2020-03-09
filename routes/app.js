@@ -1,7 +1,5 @@
 const express = require('express');
 const router = express.Router();
-const bcrypt = require('bcrypt');
-const jwt = require('jsonwebtoken');
 const post = require('../models/addquery');
 const put = require('../models/updatequery');
 const del = require('../models/deletequery');

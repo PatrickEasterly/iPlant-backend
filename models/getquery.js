@@ -17,6 +17,7 @@ async function userByUsername(username){
 async function oneUser(id){
     let oneUser = await db.oneOrNone(`SELECT * FROM users WHERE id=${id};`);
     let allUserPlants = await db.any(`SELECT id from plants WHERE userid=${id};`);
+    let allUserRooms = await allPlantsByUser(id);
     console.log(allUserPlants);
     let plantArr = [];
     for (p of allUserPlants){
@@ -24,6 +25,7 @@ async function oneUser(id){
         plantArr.push(newPlant);
     }
     oneUser.plants = plantArr;
+    oneUser.rooms = allUserRooms;
     return oneUser;
 }
 

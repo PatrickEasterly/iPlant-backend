@@ -66,7 +66,9 @@ router.post('/logout', async (req, res)=>{
     return res.status(404).json({horse:"shit"})
 });
 
-router.get('/user', async (req, res)=>{
+// GET '/app/user' 
+// returns full info card, including plants, rooms, etc. for logged in user.
+router.get('/', async (req, res)=>{
     try{
         let {userId} = req.body.token;
         let newRec = await get.oneUser(userId);
@@ -77,25 +79,37 @@ router.get('/user', async (req, res)=>{
     }
 });
 
-router.put('/user', async (req, res)=>{
+// PUT '/app/user' 
+// modifies logged in users(by JWT TOKEN) account. returns new record as JSON.
+// if either email or username are attempted to be modified to email or username that already exists, 
+// does not modify record, and returns status (403) and {error : '(username or email) already exists'}
+router.put('/', async (req, res)=>{
     try{
         let updateUser = req.body;
+        updateUser.id = req.body.token.userId;
         let updateRec = await put.updateUser(updateUser);
         console.log(updateRec);    
         if (!updateRec.error){
+            console.log("NEW RECORD WRITTEN!!");
+            console.log(updateRec);
             return res.json(updateRec);
         }
-        return res.status(404).json(updateRec);
+        return res.status(403).json(updateRec);
     }catch(e){
         console.log(e);
         res.json({horse:"shit"})
     }
 });
 
-router.delete('/user', async (req, res)=>{
+// DELETE '/app/user'
+// Removes logged in user. Deletes all records in all tables associated with their userId.
+// logs user out by default, as the userId in JWT token is for a non-existent user.
+router.delete('/', async (req, res)=>{
     try{
-        let delUser = req.body;
-        let delRec = await del.deleteUser(delUser.id);
+        let {userId} = req.body.token;
+        console.log("DELETING USER!!!");
+        let delRec = await del.deleteUser(userId);
+        console.log(delRec);
         if (!delRec.error){
             return res.json(delRec);
         }
