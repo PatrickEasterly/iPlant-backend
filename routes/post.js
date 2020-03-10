@@ -24,7 +24,10 @@ router.get('/', async (req, res)=>{
     try{
         let postid = req.body.id;
         let newRec = await get.onePost(postid);
-        res.json(newRec);
+        if(newRec){
+            return res.json(newRec);
+        }
+        return res.status(404).json({"error":"post doesn't exist."});
     }catch(e){
         console.log(e);
         res.json({horse:"shit"})

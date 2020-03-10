@@ -21,7 +21,6 @@ router.post('/login', async (req, res) =>{
         let login = {...req.body};
         if(!login.password){return res.status(403).json({login:"FAILURE", error:"no password sent!!"});}
         if(login.username || login.email){
-        //     console.log("past the || check!");
             let userInfo;
             if(login.username){
                 userInfo = await get.userByUsername(login.username);
