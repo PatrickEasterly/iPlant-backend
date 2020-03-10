@@ -23,7 +23,7 @@ async function updateUser(userObj){
                 updateString += ` hash='${userObj.hash}',`;
             }
             updateString = updateString.slice(0, -1);
-            updateString += ` where id = ${userObj.id} RETURNING *`;
+            updateString += ` where id = ${userObj.id} RETURNING *;`;
             console.log(updateString);
             let updated = await db.oneOrNone(updateString);
             return updated;
@@ -46,9 +46,9 @@ async function updateRoom(roomObj){
     try{
         if(roomObj.id){
             let updateString = 'update rooms set';
-            if (roomObj.userid){
-                updateString += ` userid='${roomObj.userid}',`;
-            }
+            // if (roomObj.userid){
+            //     updateString += ` userid='${roomObj.userid}',`;
+            // }
             if (roomObj.roomname){
                 updateString += ` roomname='${roomObj.roomname}',`;
             }
@@ -62,7 +62,7 @@ async function updateRoom(roomObj){
                 updateString += ` lightamount='${roomObj.lightamount}',`;
             }
             updateString = updateString.slice(0, -1);
-            updateString += ` where id=${roomObj.id} RETURNING *`;
+            updateString += ` where id=${roomObj.id} RETURNING *;`;
             let updated = await db.one(updateString);
             return updated;
         }
@@ -115,7 +115,7 @@ async function updatePlantinfo(plantinfoObj){
                 updateString += ` photo='${plantinfoObj.photo}',`;
             }
             updateString = updateString.slice(0, -1);
-            updateString += ` where id = ${plantinfoObj.id} RETURNING *`;
+            updateString += ` where id = ${plantinfoObj.id} RETURNING *;`;
             let updated = await db.oneOrNone(updateString);
             return updated;
         }
@@ -129,11 +129,17 @@ async function updatePlantinfo(plantinfoObj){
 async function updatePlant(plantObj){
     try{
         if(plantObj.id){
+            console.log("inside updatePlant");
             let updateString = 'update plants set';
-            if (plantObj.userid){
-                updateString += ` userid=${plantObj.userid},`;
-            }
+            // if (plantObj.userid){
+            //     updateString += ` userid=${plantObj.userid},`;
+            // }
             if (plantObj.roomid){
+                let oldPlant = await db.oneOrNone(`SELECT userid from plants where id=${plantObj.id};`);
+                let newRoom = await db.oneOrNone(`SELECT userid FROM rooms where id=${plantObj.roomid};`);
+                if(newRoom.userid != oldPlant.userid){
+                    return ({'error': "can't move plant to room not owned by user"});
+                }
                 updateString += ` roomid=${plantObj.roomid},`;
             }
             if (plantObj.plantinfoid){
@@ -143,7 +149,7 @@ async function updatePlant(plantObj){
                 updateString += ` plantname='${plantObj.plantname}',`;
             }
             updateString = updateString.slice(0, -1);
-            updateString += ` where id = ${plantObj.id} RETURNING *`;
+            updateString += ` where id = ${plantObj.id} RETURNING *;`;
             let updated = await db.oneOrNone(updateString);
             return updated;
         }
@@ -169,9 +175,9 @@ async function updatePost(postObj){
     try{
         if(postObj.id){
             let updateString = 'update posts set';
-            if (postObj.userid){
-                updateString += ` userid=${postObj.userid},`;
-            }
+            // if (postObj.userid){
+            //     updateString += ` userid=${postObj.userid},`;
+            // }
             if (postObj.plantid){
                 updateString += ` plantid=${postObj.plantid},`;
             }
@@ -185,7 +191,7 @@ async function updatePost(postObj){
                 updateString += ` caption='${postObj.caption}',`;
             }
             updateString = updateString.slice(0, -1);
-            updateString += ` where id = ${postObj.id} RETURNING *`;
+            updateString += ` where id = ${postObj.id} RETURNING *;`;
             let updated = await db.oneOrNone(updateString);
             return updated;
         }
@@ -208,12 +214,12 @@ async function updateComment(commentObj){
     try{
         if(commentObj.id){
             let updateString = 'update comments set';
-            if (commentObj.userid){
-                updateString += ` userid=${commentObj.userid},`;
-            }
-            if (commentObj.postid){
-                updateString += ` postid=${commentObj.postid},`;
-            }
+            // if (commentObj.userid){
+            //     updateString += ` userid=${commentObj.userid},`;
+            // }
+            // if (commentObj.postid){
+            //     updateString += ` postid=${commentObj.postid},`;
+            // }
             if (commentObj.commentdate){
                 updateString += ` commentdate='${commentObj.commentdate}',`;
             }
@@ -221,7 +227,7 @@ async function updateComment(commentObj){
                 updateString += ` comment='${commentObj.comment}',`;
             }
             updateString = updateString.slice(0, -1);
-            updateString += ` where id = ${commentObj.id} RETURNING *`;
+            updateString += ` where id = ${commentObj.id} RETURNING *;`;
             let updated = await db.oneOrNone(updateString);
             return updated;
         }

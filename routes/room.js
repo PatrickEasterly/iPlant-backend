@@ -6,10 +6,10 @@ const del = require('../models/deletequery');
 const get = require('../models/getquery');
 
 // GET '/app/room' 
-// Gets ALL rooms for logged in user.
+// Gets ALL rooms for logged in user, based on userid in JWT token.
+// returns array of all room ojects.
 router.get('/', async (req, res)=>{
     try{
-        console.log(req.body.token);
         let allRooms = await get.allRoomsByUser(req.body.token.userid);
         return res.json(allRooms);
     } catch(e){
@@ -21,11 +21,11 @@ router.get('/', async (req, res)=>{
 //POST '/app/room' 
 // Adds new room assigned to logged in user. needs {roomname, hightemp, lowtemp, lightamount}.
 // uses default values if not all are passed in.
+// returns object for newly added room.
 router.post('/', async (req, res)=>{
     try{
-        let newRoom = req.body;
+        let newRoom = {...req.body};
         newRoom.userid = req.body.token.userid;
-        console.log(newRoom);
         let newRec = await post.addRoom(newRoom);
         if (!newRec.error){
             return res.json(newRec);
@@ -54,13 +54,13 @@ router.post('/', async (req, res)=>{
 //PUT '/app/room'
 // modifies existing room (only fields passed as body keys)and sends back modified room object as JSON, if room belongs to logged in user.
 // Sends back error JSON if user does not own room, or if integer fields can't be parsed for integers.
+// Returns object for modified room.
 router.put('/', async (req, res)=>{
     try{
-        let updateRoom = req.body;
+        let updateRoom = {...req.body};
         let oldRoom = await get.oneRoom(updateRoom.id);
         if(oldRoom.userid == req.body.token.userid){
             let updateRec = await put.updateRoom(updateRoom);
-            console.log(updateRec);    
             if (!updateRec.error){
                 return res.json(updateRec);
             } 
@@ -76,6 +76,7 @@ router.put('/', async (req, res)=>{
 //DELETE '/app/room'
 // Deletes room (req.body.id) IF room belongs to logged in user.
 // otherwise sends back error JSON.
+// returns object of deleted room.
 router.delete('/', async (req, res)=>{
     try{
         let delRoom = req.body.id;

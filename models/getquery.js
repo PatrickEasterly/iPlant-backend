@@ -13,6 +13,11 @@ async function userByUsername(username){
     return user;
 }
 
+async function userByEmail(email){
+    let user = await db.oneOrNone(`SELECT * FROM users WHERE email='${email}';`);
+    return user;
+}
+
 // get one user, by userid
 async function oneUser(id){
     let oneUser = await db.oneOrNone(`SELECT * FROM users WHERE id=${id};`);
@@ -73,6 +78,12 @@ async function onePlant(id){
     return onePlant;
 }
 
+// get one plantinfo, by id
+async function onePlantSimple(id){
+    let onePlant = await db.oneOrNone(`SELECT userid FROM plants WHERE id=${id};`);
+    return onePlant;
+}
+
 // get all watering events
 async function allWaters(){
     let allWaters = await db.any(`SELECT * FROM Water;`);
@@ -82,6 +93,11 @@ async function allWaters(){
 // get all watering events associated with one plant, by plantid
 async function oneWater(plantid){
     let oneWater = await db.any(`SELECT * FROM Water WHERE plantid=${plantid};`);
+    return oneWater;
+}
+
+async function oneWaterSimple(id){
+    let oneWater = await db.oneOrNone(`SELECT * FROM Water WHERE id=${id};`);
     return oneWater;
 }
 
@@ -155,6 +171,7 @@ module.exports = {
     allRoomsByUser,
     allPlantsByRoom,
     userByUsername,
+    userByEmail,
     allUsers,
     oneUser,
     allRooms,
@@ -163,8 +180,10 @@ module.exports = {
     onePlantinfo,
     allPlants,
     onePlant,
+    onePlantSimple,
     allWaters,
     oneWater,
+    oneWaterSimple,
     allFollows,
     oneFollow,
     allPosts,

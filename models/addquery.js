@@ -43,10 +43,13 @@ async function addRoom({userid, roomname = "default name", hightemp=77, lowtemp=
 
 async function addPlantinfo({latinname, commonname, waterneeds, sunlight, lowtemp, soiltype, soilph, about, planttype, photo}){
     try{
-        let newRec = await db.one(`INSERT INTO plantinfo (latinname, commonname, waterneeds, sunlight, lowtemp, soiltype, soilph, about, planttype, photo) 
-        VALUES 
-        ('${latinname}', '${commonname}', '${waterneeds}', '${sunlight}', ${lowtemp}, '${soiltype}', '${soilph}', '${about}', '${planttype}', '${photo}') RETURNING *;`);
-        return newRec;
+        if(latinname && commonname && waterneeds && sunlight && lowtemp && soiltype && soilph && about && planttype && photo){
+            let newRec = await db.one(`INSERT INTO plantinfo (latinname, commonname, waterneeds, sunlight, lowtemp, soiltype, soilph, about, planttype, photo) 
+            VALUES 
+            ('${latinname}', '${commonname}', '${waterneeds}', '${sunlight}', ${parseInt(lowtemp)}, '${soiltype}', '${soilph}', '${about}', '${planttype}', '${photo}') RETURNING *;`);
+            return newRec;
+        }
+        return ({error:"there is a field missing!!!"});
     } catch(e){
         console.log(e);
         return ({error:"something went wrong"});
@@ -55,32 +58,38 @@ async function addPlantinfo({latinname, commonname, waterneeds, sunlight, lowtem
 
 async function addPlant({userid, roomid, plantinfoid, plantname}){
     try{
-    let newRec = await db.one(`insert into plants (userid, roomid, plantinfoid, plantname)
-    VALUES
-    ('${userid}','${roomid}','${plantinfoid}','${plantname}') RETURNING *;`);
-    return newRec;
+        let room = await db.one(`SELECT userid FROM rooms WHERE id=${roomid}`);
+        if(userid == room.userid){
+            let newRec = await db.one(`insert into plants (userid, roomid, plantinfoid, plantname)
+            VALUES
+            (${parseInt(userid)},${parseInt(roomid)},${parseInt(plantinfoid)},'${plantname}') RETURNING *;`);
+            return newRec;
+        }
+        return ({'error': "room does not belong to user."});
     } catch(e){
         console.log(e);
-        if (e.detail.includes("present")){
-            if (e.detail.includes("users")){
-                return ({error:"assigned user doesn't exist."});
-            }
-            if (e.detail.includes("room")){
-                return ({error:"assigned room doesn't exist."});
-            }
-            if (e.detail.includes("plantinfo")){
-                return ({error:"assigned plantinfo doesn't exist."});
+        if(e.detail){
+            if (e.detail.includes("present")){
+                if (e.detail.includes("users")){
+                    return ({error:"assigned user doesn't exist."});
+                }
+                if (e.detail.includes("room")){
+                    return ({error:"assigned room doesn't exist."});
+                }
+                if (e.detail.includes("plantinfo")){
+                    return ({error:"assigned plantinfo doesn't exist."});
+                }
             }
         }
         return ({error:"something went wrong"});
     }
 }
 
-async function addWater({plantid, userid, watertime}){
+async function addWater({plantid, userid}){
     try{
         let newRec = await db.one(`insert into water (plantid, userid, watertime)
         VALUES
-        ('${plantid}', ${userid} ,'${watertime}') RETURNING *;`);
+        (${plantid}, ${userid}, NOW()) RETURNING *;`);
         return newRec;
     } catch(e){
         console.log(e);

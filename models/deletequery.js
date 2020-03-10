@@ -46,7 +46,7 @@ async function deletePlant(id){
         let modPosts = await db.any(`UPDATE posts SET plantid=NULL WHERE plantid=${id};`);
         let water = await db.any(`DELETE FROM water WHERE plantid=${id};`);
         let delRec = await db.any(`DELETE FROM plants WHERE id=${id} RETURNING *;`);
-    return delRec;
+        return delRec;
     } catch(e){
         console.log(e);
         return ({error:"couldn't delete something"});
