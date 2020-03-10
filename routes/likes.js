@@ -7,7 +7,7 @@ const get = require('../models/getquery');
 
 router.post('/', async (req, res)=>{
     try{
-        let newLikes = req.body;
+        let newLikes = {userid:req.body.token.userid,postid:req.body.postid};
         let newRec = await post.addLikes(newLikes);
         if (!newRec.error){
             return res.json(newRec);
@@ -21,8 +21,7 @@ router.post('/', async (req, res)=>{
 
 router.get('/', async (req, res)=>{
     try{
-        let likes = req.body;
-        let newRec = await get.oneLikes(likes.postid);
+        let newRec = await get.oneLikes(req.body.postid);
         res.json(newRec);
     }catch(e){
         console.log(e);
@@ -32,7 +31,7 @@ router.get('/', async (req, res)=>{
 
 router.delete('/', async (req, res)=>{
     try{
-        let delLikes = req.body;
+        let delLikes = {userid:req.body.token.userid,postid:req.body.postid};
         let delRec = await del.deleteLikes(delLikes);
         if (!delRec.error){
             return res.json(delRec);

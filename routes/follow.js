@@ -7,12 +7,12 @@ const get = require('../models/getquery');
 
 router.post('/', async (req, res)=>{
     try{
-    let newFollow = req.body;
-    let newRec = await post.addFollow(newFollow);
-    if (!newRec.error){
-        return res.json(newRec);
-    }
-    res.status(404).json(newRec);
+        let newFollow = {userid:req.body.token.userid,follows:req.body.follows};
+        let newRec = await post.addFollow(newFollow);
+        if (!newRec.error){
+            return res.json(newRec);
+        }
+        res.status(404).json(newRec);
     }catch(e){
         console.log(e);
         res.json({horse:"shit"})
@@ -21,8 +21,7 @@ router.post('/', async (req, res)=>{
 
 router.get('/', async (req, res)=>{
     try{
-        let follow = req.body;
-        let newRec = await get.oneFollow(follow.userid);
+        let newRec = await get.oneFollow(req.body.token.userid);
         res.json(newRec);
     }catch(e){
         console.log(e);
@@ -32,7 +31,7 @@ router.get('/', async (req, res)=>{
 
 router.delete('/', async (req, res)=>{
     try{
-        let delFollow = req.body;
+        let delFollow = {userid:req.body.token.userid,follows:req.body.follows};
         let delRec = await del.deleteFollow(delFollow);
         if (!delRec.error){
             return res.json(delRec);
