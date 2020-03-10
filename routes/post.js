@@ -5,6 +5,8 @@ const put = require('../models/updatequery');
 const del = require('../models/deletequery');
 const get = require('../models/getquery');
 
+//POST '/app/post'
+// 
 router.post('/', async (req, res)=>{
     try{
         let newPost = {...req.body};
@@ -16,10 +18,11 @@ router.post('/', async (req, res)=>{
         res.status(404).json(newRec);
     }catch(e){
         console.log(e);
-        res.json({horse:"shit"})
+        return res.status(404).json({error:"something went wrong"});
     }
 });
 
+//GET '/app/post'
 router.get('/', async (req, res)=>{
     try{
         let postid = req.body.id;
@@ -30,10 +33,11 @@ router.get('/', async (req, res)=>{
         return res.status(404).json({"error":"post doesn't exist."});
     }catch(e){
         console.log(e);
-        res.json({horse:"shit"})
+        return res.status(404).json({error:"something went wrong"});
     }
 });
 
+//PUT '/app/post'
 router.put('/', async (req, res)=>{
     try{
         let updatePost = {...req.body};
@@ -49,10 +53,11 @@ router.put('/', async (req, res)=>{
         return res.status(403).json({"error":"post doesn't belong to user"});
     }catch(e){
         console.log(e);
-        res.json({horse:"shit"})
+        return res.status(404).json({error:"something went wrong"});
     }
 });
 
+//DELETE '/app/post'
 router.delete('/', async (req, res)=>{
     try{
         let delPost = {...req.body};
@@ -67,7 +72,7 @@ router.delete('/', async (req, res)=>{
         return res.status(403).json({"error":"post doesn't belong to user"});
     }catch(e){
         console.log(e);
-        res.json({horse:"shit"})
+        return res.status(404).json({error:"something went wrong"});
     }
 });
 
