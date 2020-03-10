@@ -7,9 +7,9 @@ VALUES
 
 insert into rooms(userid, roomname, hightemp, lowtemp, lightamount, defaultroom)
 VALUES
-(1, 'kitchen', 68, 78, 'full', 'false'),
-(1, 'bathroom', 68, 78, 'full', 'false'),
-(1, 'bedroom', 68, 78, 'full', 'false'),
+(3, 'kitchen', 68, 78, 'full', 'false'),
+(3, 'bathroom', 68, 78, 'full', 'false'),
+(3, 'bedroom', 68, 78, 'full', 'false'),
 (2, 'bedroom', 68, 78, 'full', 'false'),
 (2, 'livingroom', 68, 78, 'full', 'false'),
 (2, 'hall', 68, 78, 'full', 'false'),
@@ -21,9 +21,9 @@ VALUES
 
 insert into plants (userid, roomid, plantinfoid, plantname)
 VALUES
-(1, 1, 2, 'plantname'),
-(1, 2, 2, 'plantname'),
-(1, 3, 3, 'plantname'),
+(3, 1, 2, 'plantname'),
+(3, 2, 2, 'plantname'),
+(3, 3, 3, 'plantname'),
 (2, 4, 4, 'plantname'),
 (2, 5, 5, 'plantname'),
 (2, 6, 1, 'plantname'),
@@ -32,12 +32,12 @@ VALUES
 
 insert into water(plantid, userid, watertime)
 VALUES
-(1,1,'2020-01-08 14:05:06-05'),
-(1,1,'2020-01-08 14:05:06-05'),
-(2,1,'2020-01-08 14:05:06-05'),
-(3,1,'2020-01-08 14:05:06-05'),
-(3,1,'2020-01-08 14:05:06-05'),
-(3,1,'2020-01-08 14:05:06-05'),
+(1,3,'2020-01-08 14:05:06-05'),
+(1,3,'2020-01-08 14:05:06-05'),
+(2,3,'2020-01-08 14:05:06-05'),
+(3,3,'2020-01-08 14:05:06-05'),
+(3,3,'2020-01-08 14:05:06-05'),
+(3,3,'2020-01-08 14:05:06-05'),
 (4,2,'2020-01-08 14:05:06-05'),
 (4,2,'2020-01-08 14:05:06-05'),
 (4,2,'2020-01-08 14:05:06-05'),
