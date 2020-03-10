@@ -1,6 +1,5 @@
 const express = require('express');
 const router = express.Router();
-
 const {JWTCheck} = require('../models/userquery');
 const userRouter = require('./user');
 const roomRouter = require('./room');
@@ -13,7 +12,7 @@ const followRouter = require('./follow');
 const likesRouter = require('./likes');
 
 router.use('/user', userRouter); //DEBUGGED AND COMMENTED
-router.use('/plantinfo', plantinfoRouter);
+router.use('/plantinfo', plantinfoRouter); //DEBUGGED AND COMMENTED
 
 // This is the JWT validation check. Check if token is valid, attach token payload to req.body and call next. if not, return JSON login error.
 router.use(JWTCheck);

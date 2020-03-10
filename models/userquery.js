@@ -2,7 +2,6 @@ const jwt = require('jsonwebtoken');
 require('dotenv').config();
 const SECRET = process.env.ACCESS_TOKEN_SECRET || "notsosecret";
 
-
 // JWTCheck is middleware to validate JWT Tokens. 
 // If no authorization key in headers, returns status (403) and JSON {'error': "no authorization header"}.
 // If Token is not valid for any reason, returns status (403) and JSON {'error': "no authorization header"}

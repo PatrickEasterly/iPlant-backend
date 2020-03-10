@@ -43,10 +43,13 @@ async function addRoom({userid, roomname = "default name", hightemp=77, lowtemp=
 
 async function addPlantinfo({latinname, commonname, waterneeds, sunlight, lowtemp, soiltype, soilph, about, planttype, photo}){
     try{
-        let newRec = await db.one(`INSERT INTO plantinfo (latinname, commonname, waterneeds, sunlight, lowtemp, soiltype, soilph, about, planttype, photo) 
-        VALUES 
-        ('${latinname}', '${commonname}', '${waterneeds}', '${sunlight}', ${parseInt(lowtemp)}, '${soiltype}', '${soilph}', '${about}', '${planttype}', '${photo}') RETURNING *;`);
-        return newRec;
+        if(latinname && commonname && waterneeds && sunlight && lowtemp && soiltype && soilph && about && planttype && photo){
+            let newRec = await db.one(`INSERT INTO plantinfo (latinname, commonname, waterneeds, sunlight, lowtemp, soiltype, soilph, about, planttype, photo) 
+            VALUES 
+            ('${latinname}', '${commonname}', '${waterneeds}', '${sunlight}', ${parseInt(lowtemp)}, '${soiltype}', '${soilph}', '${about}', '${planttype}', '${photo}') RETURNING *;`);
+            return newRec;
+        }
+        return ({error:"there is a field missing!!!"});
     } catch(e){
         console.log(e);
         return ({error:"something went wrong"});
