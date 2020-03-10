@@ -19,6 +19,9 @@ const {JWTCheck} = require('../models/userquery');
 router.post('/login', async (req, res) =>{
     try{
         let login = {...req.body};
+    
+        if(!login.password){return res.status(403).json({login:"FAILURE", error:"no password sent!!"});}
+        if(!login.username){return res.status(403).json({login:"FAILURE", error:"no username sent!!"});}
         let userInfo = await get.userByUsername(login.username);
         if(!userInfo){
             return res.status(404).json({error:"invalid username"});
