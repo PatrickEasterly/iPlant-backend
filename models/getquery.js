@@ -13,6 +13,11 @@ async function userByUsername(username){
     return user;
 }
 
+async function userByEmail(email){
+    let user = await db.oneOrNone(`SELECT * FROM users WHERE email='${email}';`);
+    return user;
+}
+
 // get one user, by userid
 async function oneUser(id){
     let oneUser = await db.oneOrNone(`SELECT * FROM users WHERE id=${id};`);
@@ -166,6 +171,7 @@ module.exports = {
     allRoomsByUser,
     allPlantsByRoom,
     userByUsername,
+    userByEmail,
     allUsers,
     oneUser,
     allRooms,

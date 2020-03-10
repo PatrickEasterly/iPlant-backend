@@ -12,27 +12,34 @@ const get = require('../models/getquery');
 const {JWTCheck} = require('../models/userquery');
 
 //POST 'app/user/login'
-// Takes JSON object as body of request. requires 'username' and 'password' keys.
+// Takes JSON object as body of request. requires ('username' OR 'email') and 'password' keys.
 // Returns JSON object. If username is not in database, ends back status 404 and {'error' : "invalid username"}
 // If username is valid, check to see if password matches users hash. If no, returns status 403 and {'login':'FAILURE', 'error':'Invalid Password'}
 // IF username and password are correct, returns status 200 and {'login':"SUCCESS", 'token':${JWT token containing {'userid':(id for username)}}
 router.post('/login', async (req, res) =>{
     try{
         let login = {...req.body};
-    
         if(!login.password){return res.status(403).json({login:"FAILURE", error:"no password sent!!"});}
-        if(!login.username){return res.status(403).json({login:"FAILURE", error:"no username sent!!"});}
-        let userInfo = await get.userByUsername(login.username);
-        if(!userInfo){
-            return res.status(404).json({error:"invalid username"});
+        if(login.username || login.email){
+        //     console.log("past the || check!");
+            let userInfo;
+            if(login.username){
+                userInfo = await get.userByUsername(login.username);
+            } else {
+                userInfo = await get.userByEmail(login.email);
+            }
+            if(!userInfo){
+                return res.status(404).json({error:"invalid username or email"});
+            }
+            let comp = bcrypt.compareSync(login.password, userInfo.hash);
+            if (comp){
+                let payload = {'userid':userInfo.id};
+                let token = jwt.sign(payload, SECRET);
+                return res.json({login:"SUCCESS", token});
+            }
+            return res.status(403).json({login:"FAILURE", error:"invalid username or email or password"});
         }
-        let comp = bcrypt.compareSync(login.password, userInfo.hash);
-        if (comp){
-            let payload = {'userid':userInfo.id};
-            let token = jwt.sign(payload, SECRET);
-            return res.json({login:"SUCCESS", token});
-        }
-        return res.status(403).json({login:"FAILURE", error:"invalid username"});
+        return res.status(404).json({error:"email or username required"});
     } catch(e){
         console.log(e);
         return res.status(404).json({error:"something went wrong"});
