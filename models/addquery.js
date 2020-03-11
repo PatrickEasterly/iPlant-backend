@@ -179,6 +179,11 @@ async function addLike({postid, userid}){
     }
 }
 
+async function addSensor(plantObj){
+    await db.any(`UPDATE plants SET hassensor=false`);
+    await db.any(`UPDATE plants SET hassensor=true WHERE id=${plantObj.id}`);
+}
+
 module.exports = {
     addUser,
     addRoom,
@@ -188,5 +193,6 @@ module.exports = {
     addFollow,
     addPost,
     addComment,
-    addLike
+    addLike,
+    addSensor
 }

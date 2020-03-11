@@ -165,13 +165,15 @@ function entrybuilder(num){
     }
     if (plants[recordNum]["images_list"]){
         newRecord.photo = plants[recordNum]["images_list"][0];
+        let bigphoto = newRecord.photo.split('/t').join('/');
+        newRecord.bigphoto = bigphoto;
     }
     return newRecord;
 }
 
 async function dbInsert(record){
     console.log(record);
-    await db.none(`INSERT INTO plantinfo (latinname, commonname, waterneeds, sunlight, lowtemp, soiltype, soilph, about, planttype, photo) VALUES ('${record.latinname}', '${record.commonname}', '${record.waterneeds}', '${record.sunlight}', ${record.lowtemp}, '${record.soiltype}', '${record.soilph}', '${record.about}', '${record.planttype}', '${record.photo}')`)
+    await db.none(`INSERT INTO plantinfo (latinname, commonname, waterneeds, sunlight, lowtemp, soiltype, soilph, about, planttype, photo, bigphoto) VALUES ('${record.latinname}', '${record.commonname}', '${record.waterneeds}', '${record.sunlight}', ${record.lowtemp}, '${record.soiltype}', '${record.soilph}', '${record.about}', '${record.planttype}', '${record.photo}','${record.bigphoto}')`)
     .then()
     .catch(error => {
         console.log(record.latinname);

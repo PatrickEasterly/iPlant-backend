@@ -19,15 +19,15 @@ VALUES
 -- VALUES
 -- ('latinname', 'commonname', 'waterneeds', 'sunlight', 'lowtemp', 'soiltype', 'about', 'planttype', 'photo');
 
-insert into plants (userid, roomid, plantinfoid, plantname)
+insert into plants (userid, roomid, plantinfoid, plantname, hassensor)
 VALUES
-(3, 1, 2, 'plantname'),
-(3, 2, 2, 'plantname'),
-(3, 3, 3, 'plantname'),
-(2, 4, 4, 'plantname'),
-(2, 5, 5, 'plantname'),
-(2, 6, 1, 'plantname'),
-(2, 7, 6, 'plantname');
+(3, 1, 2, 'plantname', false),
+(3, 2, 2, 'plantname', false),
+(3, 3, 3, 'plantname', false),
+(2, 4, 4, 'plantname', false),
+(2, 5, 5, 'plantname', false),
+(2, 6, 1, 'plantname', false),
+(2, 7, 6, 'plantname', false);
 
 
 insert into water(plantid, userid, watertime)
@@ -63,3 +63,7 @@ VALUES
 insert into likes(postid,userid)
 VALUES
 (1,1);
+
+insert into sensordata(sensortime, moisture)
+VALUES
+('2020-01-08 14:05:06-05', 350);
