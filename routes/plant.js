@@ -26,6 +26,31 @@ router.get('/room/', async (req, res)=>{
     }
 });
 
+//POST '/app/plant/addsensor'
+// Must be logged in via JWT. Must pass {id:(num)} in body.
+// Removes sensor from previous plant and adds sensor to plant sent as ID.
+router.post('/addsensor', async (req, res) =>{
+    try{
+        if(req.body.id){
+            plantid = req.body.id;
+        } else if(req.body.plantid){
+            plantid = req.body.plantid;
+        } else {
+            return res.status(404).json({error:"invalid ID"});
+        }
+        console.log("before the plant call");
+        let plant = await post.addSensor(plantid);
+        console.log("after the plant call");
+        if(!plant.error){
+            return res.json(plant);
+        }
+        return res.status(403).json(plant);
+    } catch(e){
+        console.log(e);
+        return res.status(404).json({error:"something went wrong"});
+    }
+});
+
 //POST '/app/plant' 
 // Must be logged in via JWT. takes in body {roomid:(int), plantinfoid:(int), plantname:(string)} userid from JWT.
 // checks to see if room for plant belongs to logged in user.

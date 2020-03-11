@@ -179,6 +179,17 @@ async function addLike({postid, userid}){
     }
 }
 
+async function addSensor(plantid){
+    let isplant = await db.oneOrNone(`SELECT id from plants where id=${plantid};`);
+    if(isplant){
+        await db.any(`UPDATE plants SET hassensor=false;`);
+        let plant = await db.oneOrNone(`UPDATE plants SET hassensor=true WHERE id=${plantid} RETURNING *;`);
+        console.log(plant);
+        return plant;
+    }
+    return ({error:"invalid ID"});
+}
+
 module.exports = {
     addUser,
     addRoom,
@@ -188,5 +199,6 @@ module.exports = {
     addFollow,
     addPost,
     addComment,
-    addLike
+    addLike,
+    addSensor
 }

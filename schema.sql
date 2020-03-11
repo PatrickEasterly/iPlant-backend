@@ -30,7 +30,8 @@ create table plantinfo(
     soilph text, -- acidic, neutral, basic
     about text, -- a paragraph about how awesome this plant is, probably pulled from wikipedia.
     planttype text, -- Tree, Shrub, Perennial, Succulent, Vine/climber, bulb, etc.
-    photo text -- url location of plant photo?!?
+    photo text,
+    bigphoto text -- url location of plant photo?!?
 );
 
 create table plants (
@@ -38,7 +39,8 @@ create table plants (
     userid INTEGER REFERENCES users(id),
     roomid INTEGER REFERENCES rooms(id),
     plantinfoid INTEGER REFERENCES plantinfo(id),
-    plantname text
+    plantname text,
+    hassensor boolean
 );
 
 create table water(
@@ -74,4 +76,9 @@ create table comments(
 create table likes(
     postid INTEGER REFERENCES posts(id),
     userid INTEGER REFERENCES users(id)
+);
+
+create table sensordata(
+    sensortime timestamptz,
+    moisture INTEGER
 );

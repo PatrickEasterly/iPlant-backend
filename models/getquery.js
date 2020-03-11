@@ -67,6 +67,10 @@ async function allPlants(){
 // get one specific plant, by id
 async function onePlant(id){
     let onePlant = await db.oneOrNone(`SELECT * FROM Plants WHERE id=${id};`);
+    if(onePlant.hassensor){
+        let sensorData = await db.oneOrNone('SELECT * FROM sensordata');
+        onePlant.sensordata = sensorData;
+    }
     let plantInfo = await onePlantinfo(onePlant.plantinfoid);
     delete onePlant.plantinfoid;
     onePlant.plantInfo = plantInfo;
@@ -164,7 +168,6 @@ async function allPlantsByRoom(roomid){
     let allPlants = await db.any(`SELECT * from plants WHERE roomid=${roomid};`);
     return allPlants;
 }
-
 
 module.exports = {
     allPlantsByUser,
