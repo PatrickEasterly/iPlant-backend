@@ -11,6 +11,7 @@ create table rooms(
     id serial primary key,
     userid INTEGER references users(id),
     roomname text,
+    roomimg text,
     hightemp integer,
     lowtemp integer,
     lightamount text,
