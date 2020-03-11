@@ -23,7 +23,7 @@ async function userByEmail(email){
 async function oneUser(id){
     let oneUser = await db.oneOrNone(`SELECT * FROM users WHERE id=${id};`);
     let allUserPlants = await db.any(`SELECT id from plants WHERE userid=${id};`);
-    let allUserRooms = await allPlantsByUser(id);
+    let allUserRooms = await allRoomsByUser(id);
     console.log(allUserPlants);
     let plantArr = [];
     for (p of allUserPlants){
