@@ -9,12 +9,12 @@ async function allUsers(){
 }
 
 async function userByUsername(username){
-    let user = await db.oneOrNone(`SELECT * FROM users WHERE username='${username}';`);
+    let user = await db.oneOrNone(`SELECT * FROM users WHERE username ILIKE '${username}';`);
     return user;
 }
 
 async function userByEmail(email){
-    let user = await db.oneOrNone(`SELECT * FROM users WHERE email='${email}';`);
+    let user = await db.oneOrNone(`SELECT * FROM users WHERE email ILIKE '${email}';`);
     return user;
 }
 
