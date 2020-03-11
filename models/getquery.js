@@ -206,7 +206,7 @@ function getWaterCal(userObj){
     let plants = userObj.plants;
     let plantCal = plants.map(plant =>{
         let waterDate = (nextWaterDate(plant).format("YYYY-MM-DD"));
-        return {[waterDate]:plant.id};
+        return {[waterDate]:plant.plantInfo.commonname};
     });
 
     console.log("==========");
