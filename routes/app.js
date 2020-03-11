@@ -10,6 +10,7 @@ const postRouter = require('./post');
 const commentRouter = require('./comment');
 const followRouter = require('./follow');
 const likesRouter = require('./likes');
+const calRouter = require('./cal');
 
 router.use('/user', userRouter); //DEBUGGED AND COMMENTED
 router.use('/plantinfo', plantinfoRouter); //DEBUGGED AND COMMENTED
@@ -21,6 +22,7 @@ router.use(JWTCheck);
 router.use('/room', roomRouter);  //DEBUGGED AND COMMENTED
 router.use('/plant', plantRouter); //DEBUGGED AND COMMENTED
 router.use('/water', waterRouter); //DEBUGGED AND COMMENTED
+router.use('/cal', calRouter);
 router.use('/post', postRouter);
 router.use('/comment', commentRouter);
 router.use('/follow', followRouter);

@@ -65,6 +65,10 @@ Checks if room belongs to logged in user, selects all plants in that room.
 returns object with error key if something isn't right.
 Returns object with 2 keys. {room:(room object), "plants:(array of all plants in room)"}
 
+## POST '/app/plant/addsensor'
+Must be logged in via JWT. Must pass {id:(num)} OR {plantid:(num)} in body.
+Removes sensor from previous plant and adds sensor to plant sent as ID.
+
 ## POST '/app/plant' 
 Must be logged in via JWT. takes in body {roomid:(int), plantinfoid:(int), plantname:(string)} userid from JWT.
 checks to see if room for plant belongs to logged in user.
