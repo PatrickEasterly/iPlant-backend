@@ -22,11 +22,11 @@ async function addUser({username, firstname="John", lastname="Doe", email, hash}
     }
 }
 
-async function addRoom({userid, roomname = "default name", hightemp=77, lowtemp=66, lightamount="full"}){
+async function addRoom({userid, roomimg, roomname = "default name", hightemp=77, lowtemp=66, lightamount="full"}){
     try{
         let newRec = await db.one(`insert into rooms (userid, roomname, hightemp, lowtemp, lightamount)
         VALUES
-        ('${userid}','${roomname}',${parseInt(hightemp)},${parseInt(lowtemp)},'${lightamount}') RETURNING *;`);
+        ('${userid}', ${roomimg}, '${roomname}',${parseInt(hightemp)},${parseInt(lowtemp)},'${lightamount}') RETURNING *;`);
         return newRec;
     } catch(e){
         console.log(e);
