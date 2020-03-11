@@ -1,4 +1,5 @@
 const db = require('../connection');
+const moment = require('moment');
 
 // query functions to pull from Postgres for API
 
@@ -169,6 +170,74 @@ async function allPlantsByRoom(roomid){
     return allPlants;
 }
 
+function nextWaterDate(plant){
+    let now = moment();
+    let now2 = moment();
+    console.log(now.format("YYYY-MM-DD"));
+    if(plant.waters.length == 0){
+        return now2;
+    }
+    let recentWater = moment(plant.waters[plant.waters.length-1].watertime);
+    if (plant.plantInfo.waterneeds.includes("high")){
+        if (recentWater > now.subtract(3, 'days')){
+            return recentWater.add(3,'days');
+        }
+        return now2;
+    }
+    if (plant.plantInfo.waterneeds.includes("moderate")){
+        if (recentWater > now.subtract(8, 'days')){
+            return recentWater.add(8,'days');;
+        }
+        return now2;
+    }
+    if (plant.plantInfo.waterneeds.includes("low")){
+        if (recentWater > now.subtract(3, 'weeks')){
+            return recentWater.add(3,'weeks');;
+        }
+        return now2;
+    }
+    if(plant.plantInfo.waterneeds.includes("dry")){
+        return now2.add(3, 'months');
+    }
+    return now2;
+}
+
+function getWaterCal(userObj){
+    let plants = userObj.plants;
+    let plantCal = plants.map(plant =>{
+        let waterDate = (nextWaterDate(plant).format("YYYY-MM-DD"));
+        return {[waterDate]:plant.id};
+    });
+
+    console.log("==========");
+    let calObj = {};
+    let zeroKey = (Object.keys(plantCal[0])[0]);
+    calObj[zeroKey]=[];
+    calObj[zeroKey].push(plantCal[0][zeroKey]);
+    console.log(calObj);
+
+    for (let x=1;x<plantCal.length;x++){
+        let calKey = (Object.keys(plantCal[x])[0]);
+        console.log("plantCal[x]");
+        console.log(plantCal[x]);
+    
+        if(Object.keys(calObj).includes(calKey)){
+            console.log("key exists already!!");
+            console.log((calKey));
+            calObj[(calKey)].push(plantCal[x][calKey]);
+        } else {
+            console.log("key doesn't exist!!");
+            console.log((calKey));
+
+            calObj[(calKey)] = [];
+            calObj[(calKey)].push(plantCal[x][calKey]);
+        }
+    }
+    
+    let calArr = Object.keys(calObj).map(key => {return {[key]:calObj[key]}});
+    return calArr;
+}
+
 module.exports = {
     allPlantsByUser,
     allRoomsByUser,
@@ -194,5 +263,6 @@ module.exports = {
     allComments,
     oneComment,
     allLikes,
-    oneLike
+    oneLike,
+    getWaterCal
 }

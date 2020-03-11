@@ -18,6 +18,7 @@ function JWTCheck (req, res, next){
             if(err){
                 return res.status(403).json({error:"invalid token"});
             }
+            // console.log(token);
             req.body.token = {...token};
             next();
         });
