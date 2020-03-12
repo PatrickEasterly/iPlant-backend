@@ -105,3 +105,7 @@ returns an array of water event objects.
 must be logged in via JWT. takes in body {id:(num)}. userid from JWT.
 checks that water event exists, and that it belongs to user.
 Deletes water event, and returns it as JSON object.
+
+## GET '/app/cal'
+must be logged in via JWT.
+returns a calendar array of objects. 

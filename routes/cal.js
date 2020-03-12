@@ -9,11 +9,10 @@ const get = require('../models/getquery');
 //GET '/app/cal'
 // returns the next water date for EVERY plant of logged in user.
 // {
-//     date1(next water date):[plantid(or plantObject),plantid,plantid],
+//     date1(next water date):[plantid,plantid,plantid],
 //     date2:[plantid, plantid2],
 //     date3:[plantid]
 // }
-
 
 router.get('/', async (req,res)=>{
     try{
