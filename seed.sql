@@ -21,13 +21,13 @@ VALUES
 
 insert into plants (userid, roomid, plantinfoid, plantname, hassensor)
 VALUES
-(3, 1, 2, 'plantname', false),
-(3, 2, 2, 'plantname', false),
-(3, 3, 3, 'plantname', false),
-(2, 4, 4, 'plantname', false),
-(2, 5, 5, 'plantname', false),
-(2, 6, 1, 'plantname', false),
-(2, 7, 6, 'plantname', false);
+(3, 1, 90, 'Prayer plant', false),
+(3, 2, 864, 'Silver Dollar', false),
+(3, 3, 858, 'Water Iris', false),
+(2, 4, 90, 'Prayer plant', false),
+(2, 5, 864, 'Silver Dollar', false),
+(2, 6, 382, 'Carpet Bugle', false),
+(2, 7, 385, 'smooth beard tounge', false);
 
 
 insert into water(plantid, userid, watertime)
