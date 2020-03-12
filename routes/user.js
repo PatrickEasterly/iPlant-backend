@@ -75,7 +75,7 @@ router.use(JWTCheck);
 // NEEDS TO get WRITTEN AFTER JWT REFRESH TOKENS AND TIMEOUTS ARE IMPLEMENTED!!
 router.post('/logout', async (req, res)=>{
     
-    return res.status(404).json({horse:"shit"})
+    return res.status(404).json({advice:"just forget your token, buddy!"});
 });
 
 // GET '/app/user' 
